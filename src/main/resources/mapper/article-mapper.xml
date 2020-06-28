@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pjl.blog.myblog.dao.ArticleDao">
+
+    <resultMap id="ArticleDto" type="com.pjl.blog.myblog.dto.ArticleDto">
+        <id property="id" column="aid"></id>
+        <result property="title" column="title"></result>
+        <result property="description" column="description"></result>
+        <result property="content" column="content"></result>
+        <result property="gmtCreate" column="gmt_create"></result>
+        <result property="gmtModified" column="gmt_modified"></result>
+        <result property="creator" column="creator"></result>
+        <result property="commentCount" column="comment_count"></result>
+        <result property="viewCount" column="view_count"></result>
+        <result property="likeCount" column="like_count"></result>
+        <association property="user" javaType="com.pjl.blog.myblog.model.UserVO">
+            <id property="id" column="uid"></id>
+            <result property="accountId" column="account_id"></result>
+            <result property="name" column="user_name"></result>
+            <result property="token" column="token"></result>
+            <result property="gmtCreate" column="gmt_create"></result>
+            <result property="gmtModified" column="gmt_modified"></result>
+            <result property="avatarUrl" column="avatar_url"></result>
+        </association>
+        <collection property="tagList" ofType="com.pjl.blog.myblog.dto.TagDto">
+            <id property="id" column="tid"></id>
+            <result property="tagName" column="tag_name"></result>
+            <result property="remarks" column="remarks"></result>
+        </collection>
+    </resultMap>
+
+    <insert id="saveArticleTags" >
+        insert into article_tags (article_id,tag_id,gmt_create) values
+        <foreach collection="list" index="index" item="atag" separator=",">
+            (#{atag.articleId},#{atag.tagId},#{atag.gmtCreate})
+        </foreach>
+    </insert>
+    <select id="totalCount" resultType="integer">
+        select count(1) from article a
+        <if test="tagId != null">
+            left join article_tags at on a.id = at.article_id
+            left join tag t on at.tag_id = t.id
+        </if>
+        where 1 = 1
+        <if test="tagId != null">
+            and at.tag_id = #{tagId}
+        </if>
+        <if test="userId != null">
+            and creator = #{userId}"
+        </if>
+    </select>
+
+    <select id="getArticleList" resultMap="ArticleDto">
+        select a.id aid,a.title,a.description,a.content,a.gmt_create,a.gmt_modified,a.creator,a.comment_count,a.view_count,a.like_count,
+            t.id tid,t.tag_name,t.remarks,
+            u.id uid,u.account_id,u.name user_name,u.token,u.gmt_create,u.gmt_modified,u.avatar_url
+        from (select * from article order by gmt_create desc limit #{offset},#{size}) a
+        left join article_tags at on a.id = at.article_id
+        left join tag t on at.tag_id = t.id
+        left join user u on a.creator = u.id
+        where 1 = 1
+        <if test="userId != null">
+            and a.creator = #{userId};
+        </if>
+        <if test="tagId != null">
+            and at.tag_id = #{tagId}
+        </if>
+        and a.type = 1
+        and a.del_flag = 0
+        order by a.gmt_create desc
+    </select>
+</mapper>

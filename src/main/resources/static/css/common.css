@@ -1,0 +1,584 @@
+a {
+    text-decoration: none;
+    color: #000000;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.blog-container {
+    display: flex;
+    padding: 3rem 0 0 0;
+    position: relative;
+    background-color: #fff;
+    top: 0;
+    left: 0;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    overflow: hidden;
+    transition: all 0.5s ease-out 0s;
+    opacity: 1;
+    transform: translate3d(0, 0, 0)
+}
+
+.intro-landing {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    height: 50vh;
+    overflow: hidden;
+}
+
+.site-intro-meta {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.post-body .site-intro-meta, .about-body .site-intro-meta {
+    width: 50%;
+    min-width: 42.8125rem;
+    margin: 0 auto;
+    align-items: flex-start
+}
+
+.post-body .intro-title, .about-body .intro-title {
+    font: 4rem/5.3rem "Agency FB";
+    color: #fff;
+    margin: 0
+}
+
+.post-intros {
+    opacity: 1;
+    transition: all 0.5s ease-out 0.5s;
+    transform: translate3d(0, -1rem, 0)
+}
+
+.post-intro-meta , .post-intro-meta a{
+    margin-top: 0.2rem;
+    font: 1.5rem "Agency FB";
+    color: #fff;
+    align-items: center
+}
+
+.post-intro-time {
+    font-size: 1.5rem;
+    margin-right: 0.5rem
+}
+
+.page-nav {
+    padding: 1rem 0 0.5rem 0;
+    display: flex;
+    justify-content: center
+}
+
+.page-nav > * {
+    font: 1.4rem "Agency FB";
+    color: #252525;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+    text-align: center
+}
+
+.page-nav a {
+    position: relative;
+    color: #ccc;
+    overflow: visible
+}
+
+.page-nav a::after {
+    content: '';
+    position: absolute;
+    left: calc((100% - 98%) / 2);
+    bottom: -15%;
+    transition: all 0.15s ease-in;
+    width: 98%;
+    height: 2px;
+    transform: translate(0, 0);
+    background-color: #ccc;
+    opacity: 0
+}
+
+.page-nav a:hover::after {
+    transform: translate(0, -2px);
+    opacity: 1
+}
+
+
+.article-entry  {
+    font-family: "Agency FB";
+}
+
+.intro-img {
+    background-image: url("/img/landing.jpg");
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    height: calc(100% + 1px);
+    width: 100%;
+    filter: brightness(0.5);
+    -webkit-filter: brightness(0.5);
+    -moz-filter: brightness(0.5);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-color: transparent;
+}
+
+.about-img {
+    background-image: url("/img/about.jpg");
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    height: calc(100% + 1px);
+    width: 100%;
+    filter: brightness(0.5);
+    -webkit-filter: brightness(0.5);
+    -moz-filter: brightness(0.5);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-color: transparent;
+}
+
+.top {
+    position: fixed;
+    bottom: 6rem;
+    right: 6rem;
+    z-index: 999;
+    display: none;
+    width: 1.5rem;
+    text-align: center;
+    border: #000000 2px solid;
+}
+
+.load-more {
+    padding-top: 2rem;
+    text-align: center;
+    font: 3rem "Agency FB";
+}
+
+.load-more:hover {
+    color:#f75357;
+}
+
+
+.intro-title {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    font-family: "Agency FB";
+}
+
+.site-title {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #ffffff;
+    font-family: "Agency FB";
+}
+
+.intro-title h1 , .site-title h1{
+    font-size: 5.3rem;
+}
+
+
+.index-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 3.5rem;
+    overflow: hidden;
+    z-index: 10;
+    transform: translate3d(0, 0, 0);
+    transition: transform 0.3s ease-in 0s;
+}
+
+.index-link {
+    padding-top: 0.5rem;
+    bottom: 0;
+    font-family: "Agency FB";
+    font-size: 1.5rem;
+    color: #fff;
+    cursor: pointer;
+    padding-right: 2.5rem;
+}
+
+.invert {
+    filter: invert(100%);
+    border-bottom: 1px solid rgba(255,255,255,1);
+    background-color: #000000;
+}
+
+.index-link:hover{color:#f75357}
+
+.modal-text {
+    padding-top: 0.5rem;
+    bottom: 0;
+    font-family: "Agency FB";
+    font-size: 25px;
+    color: #000000;
+    padding-right: 2.5rem;
+}
+
+.font-xm {
+    font-size: 14px;
+}
+
+.gray, .gray a {
+    color: #999;
+}
+
+.d-gray, .d-gray a{
+    color: #778087;
+}
+
+.l-gray {
+    color: #cccccc;
+}
+
+.r-2 {
+    right: 2rem;
+}
+
+.r-5 {
+    right: 5rem;
+}
+
+
+.header-side-menu {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    border: 2px solid #fff;
+    width: 1.5rem;
+    transform: translate(0, -50%);
+    color: #fff;
+    text-align: center;
+    line-height: 1.5rem;
+    z-index: 21;
+    cursor: pointer;
+}
+
+.profile {
+    order: 0;
+    vertical-align: top;
+    flex-shrink: 0;
+    margin: 4px 0 0 0;
+    width: 200px;
+    font: 1rem "Agency FB";
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.profile-name {
+    font-size: 2rem;
+    line-height: 3rem;
+    padding: 0.5rem 0 0 0;
+    color: #333;
+    text-align: center;
+}
+
+.profile-signature {
+    font-size: 1rem;
+    text-align: center;
+    color: #777777;
+}
+
+
+.avatar-big {
+    width: 100%;
+    box-shadow: 0 0 2px 0 rgba(0,0,0,0.6);
+    display: block;
+}
+
+.th-account-icon {
+    width: 30px;
+    height: 30px;
+}
+
+#wrapper {
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    transition: all 0.3s ease-in 0s;
+    transform: translate3d(0, 0, 0);
+    position: relative;
+    box-shadow: -3px 0 2px 0 rgba(0,0,0,0.6);
+}
+
+.toc-wrapper {
+    display: block;
+    position: absolute;
+    top: 55vh;
+    width: 22%;
+    right: 1%;
+    overflow: hidden;
+    max-width: calc((100% - 42.8125rem - 4rem) / 2);
+    z-index: 9999;
+    margin: calc(3.5rem + 1rem) 0 0 0;
+    transform: translate3d(0, 0, 0);
+    transition: transform 0.3s ease-out 0s;
+}
+
+.tags-wrapper {
+    display: block;
+    position: absolute;
+    top: 50vh;
+    width: 10%;
+    right: 5%;
+    overflow: hidden;
+    max-width: calc((100% - 42.8125rem - 4rem) / 2);
+    z-index: 9999;
+    margin: calc(3.5rem + 1rem) 0 0 0;
+    transform: translate3d(0, 0, 0);
+    transition: transform 0.3s ease-out 0s;
+}
+
+.side-top {
+    cursor: pointer;
+    user-select: none;
+    font: bolder 1.2rem "Agency FB";
+}
+
+.toc-fixed {
+    position: fixed;
+    top: 0rem !important;
+}
+
+.sep5 {
+    height: 5px;
+}
+
+.sep10 {
+    height: 10px;
+}
+
+.sep20{
+    height: 20px;
+}
+
+.unselect-tag {
+    display: inline-block;
+    font-size: .875rem;
+    padding: 0 .375rem;
+    height: 1.5rem;
+    line-height: 1.5rem;
+    border-radius: .1875rem;
+    background-color: rgba(0,150,94,.1);
+}
+
+.selected-tag {
+    display: inline-block;
+    padding: .25rem .5rem;
+    font-size: .875rem;
+    line-height: 1.5;
+    border-radius: .2rem;
+}
+
+.sidebar {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    left: 0;
+    top: 0;
+    z-index: 0;
+    height: 100%;
+    width: 400px;
+    transition: all 0.3s ease-in 0s;
+    overflow-x: hidden;
+    background-color: #222;
+}
+main {
+    display: block;
+}
+
+
+.main {
+    order: 1;
+    width: 50%;
+    min-width: 42.8125rem;
+    flex-grow: 0;
+    padding: 0 0 0 0;
+    margin-left: 3rem;
+}
+
+.index-post {
+    position: relative;
+    padding: 1rem 0rem 1rem 0rem;
+    border-bottom: 1px dashed rgba(0,0,0,0.2);
+    z-index: 3;
+}
+
+.abstract-title {
+    line-height: 2.5rem;
+    color: #000;
+    padding-bottom: 0.5rem;
+}
+
+.abstract-title span:last-of-type {
+    transition: color 0.1s ease-in;
+    font-size: 2.0rem;
+}
+
+.index-post .abstract-content {
+    color: #060606;
+    font-size: 1.03rem;
+    line-height: 1.6rem;
+    font-weight: 300;
+    word-break: break-word;
+}
+
+.abstract-content p, .article-entry p {
+    line-height: 1.625;
+}
+
+.abstract-post-meta {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0 0 0;
+    font-family: "Agency FB";
+    color: #aaa;
+    height: 1.5rem;
+}
+
+.abstract-calander {
+    position: relative;
+    top: -0.1rem;
+    margin-right: 0.3rem;
+    font-size: 1rem;
+}
+
+.post-tag {
+    font-size: 1rem;
+    position: relative;
+    color: #3f3f3f;
+    margin-left: 0.4rem;
+    font-weight: lighter;
+}
+
+.post-intro-tags {
+    font-family:  "Agency FB"
+}
+
+.index-tags {
+    font-family:  "Agency FB"
+}
+
+.index-tags .post-tag {
+    position: relative;
+    margin-left: 0;
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+    color: #000000
+}
+
+.index-tags .post-tag::after {
+    content: '';
+    position: absolute;
+    left: calc((100% - 98%) / 2);
+    bottom: -15%;
+    transition: all 0.15s ease-in;
+    width: 98%;
+    height: 2px;
+    transform: translate(0, 0);
+    background-color: #000000;
+    opacity: 0
+}
+
+.index-tags .post-tag:hover::after {
+    transform: translate(0, -2px);
+    opacity: 1
+}
+
+.post-intro-tags .post-tag {
+    position: relative;
+    margin-left: 0;
+    margin-right: 0.5rem;
+    font-size: 2rem;
+    color: #fff
+}
+
+.post-intro-tags .post-tag::after {
+    content: '';
+    position: absolute;
+    left: calc((100% - 98%) / 2);
+    bottom: -15%;
+    transition: all 0.15s ease-in;
+    width: 98%;
+    height: 2px;
+    transform: translate(0, 0);
+    background-color: #fff;
+    opacity: 0
+}
+
+.post-intro-tags .post-tag:hover::after {
+    transform: translate(0, -2px);
+    opacity: 1
+}
+
+.post-intro-tags .post-tag::before,.abstract-tags .post-tag::before,.index-tags .post-tag::before{
+    content: '#'
+}
+
+
+
+.profile-social {
+    position: relative;
+    width: 100%;
+    text-align: left;
+    line-height: 1.7rem;
+    padding: 0.5rem 0;
+    font-size: 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+}
+
+.profile-social a, .profile-social i{
+    color: #777777;
+}
+
+.zi_tmWeixin:hover .profile-qr, .zi_tmQq:hover .profile-qr {
+    opacity: 1;
+    visibility: visible
+}
+
+.profile-qr {
+    visibility: hidden;
+    position: absolute;
+    left: 0;
+    bottom: 2.5rem;
+    border: 3px solid #fff;
+    border-radius: 3px;
+    z-index: 99;
+    background-color: #fff;
+    width: 7rem;
+    opacity: 0;
+    transition: all 0.1s ease-in 0s
+}
+
+.about-me {
+    padding: 0.5rem 0;
+}
+
+.about-me a {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #777777;
+}
