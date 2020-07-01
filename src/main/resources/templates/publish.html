@@ -29,7 +29,7 @@
             <input class="form-control" type="text" name="title" id="title" placeholder="标题" th:value="${articleDto != null?articleDto.title:''}">
         </div>
         <div class="sep20"></div>
-        <div class="dropdown inline" data-tag-nums="0" data-tag-max-num="5">
+        <div class="dropdown inline" style="width: 30rem" data-tag-nums="0" data-tag-max-num="5">
             <button class="btn btn-light" id="dropdown-button" data-toggle="dropdown" aria-expanded="true">
                 <i class="zi zi_plus"></i>&nbsp;添加标签
             </button>
@@ -53,7 +53,7 @@
         </div>
         <div class="sep20"></div>
         <div id="md-content">
-            <textarea style="display: none;" id="content" th:text="${articleDto !=null?articleDto.description +'<!--summary-->'+articleDto.content:''}"></textarea>
+            <textarea style="display: none;" id="content" th:text="${articleDto !=null?articleDto.descriptionStr  + articleDto.content:''}"></textarea>
         </div>
         <input type="hidden" class="form-control" name="id" id="article-id"
                th:value="${articleDto != null?articleDto.id:''}">

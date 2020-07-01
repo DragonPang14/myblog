@@ -87,6 +87,7 @@ public class ArticleService {
             dbArticleVO.setGmtModified(articleDto.getGmtCreate());
             dbArticleVO.setTitle(articleDto.getTitle());
             dbArticleVO.setDescription(articleDto.getDescription());
+            dbArticleVO.setDescriptionStr(articleDto.getDescriptionStr());
             dbArticleVO.setContent(articleDto.getContent());
             articleMapper.updateArticle(dbArticleVO);
             articleMapper.deleteArticleTags(dbArticleVO.getId());
@@ -131,9 +132,15 @@ public class ArticleService {
      * @desc getTags method
      * @return
      * @param type
+     * @param used
      */
-    public List<TagDto> getTags(Integer type) {
-        List<TagVO> tags = articleMapper.getTags(type);
+    public List<TagDto> getTags(Integer used) {
+        List<TagVO> tags;
+        if (used == 1){
+            tags = articleMapper.getUsedTags();
+        }else {
+            tags = articleMapper.getTags();
+        }
         List<TagDto> tagDtos = new ArrayList<>();
         if (tags != null && tags.size() > 0 ){
             for (TagVO tag : tags){

@@ -295,7 +295,7 @@ a:hover {
 }
 
 .profile-signature {
-    font-size: 1rem;
+    font-size: 1.5rem;
     text-align: center;
     color: #777777;
 }
@@ -355,7 +355,7 @@ a:hover {
 .side-top {
     cursor: pointer;
     user-select: none;
-    font: bolder 1.2rem "Agency FB";
+    font: bolder 1.5rem "Agency FB";
 }
 
 .toc-fixed {
@@ -454,7 +454,7 @@ main {
     display: flex;
     justify-content: space-between;
     padding: 0.5rem 0 0 0;
-    font-family: "Agency FB";
+    font: 1.2rem "Agency FB";
     color: #aaa;
     height: 1.5rem;
 }
@@ -467,7 +467,7 @@ main {
 }
 
 .post-tag {
-    font-size: 1rem;
+    font-size: 1.2rem;
     position: relative;
     color: #3f3f3f;
     margin-left: 0.4rem;
@@ -486,7 +486,7 @@ main {
     position: relative;
     margin-left: 0;
     margin-right: 0.5rem;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     color: #000000
 }
 

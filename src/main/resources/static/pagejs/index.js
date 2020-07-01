@@ -5,6 +5,8 @@ $(function () {
     getArticleList(page,getQueryString("tag"));
 
     getTags();
+
+    $(".intro-title").fadeIn(1000);
 })
 
 $(window).scroll(function () {
@@ -93,7 +95,7 @@ $("#btn-page").click(function () {
 
 function getTags() {
     $.ajax({
-        url:"/getTags",
+        url:"/getTags?used=1",
         type:"get",
         dataType: "json",
         success:function (data) {

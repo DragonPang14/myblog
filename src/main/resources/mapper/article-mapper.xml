@@ -8,6 +8,7 @@
         <id property="id" column="aid"></id>
         <result property="title" column="title"></result>
         <result property="description" column="description"></result>
+        <result property="descriptionStr" column="description_str"></result>
         <result property="content" column="content"></result>
         <result property="gmtCreate" column="gmt_create"></result>
         <result property="gmtModified" column="gmt_modified"></result>
@@ -53,7 +54,7 @@
     </select>
 
     <select id="getArticleList" resultMap="ArticleDto">
-        select a.id aid,a.title,a.description,a.content,a.gmt_create,a.gmt_modified,a.creator,a.comment_count,a.view_count,a.like_count,
+        select a.id aid,a.title,a.description,a.description_str,a.content,a.gmt_create,a.gmt_modified,a.creator,a.comment_count,a.view_count,a.like_count,
             t.id tid,t.tag_name,t.remarks,
             u.id uid,u.account_id,u.name user_name,u.token,u.gmt_create,u.gmt_modified,u.avatar_url
         from (select * from article order by gmt_create desc limit #{offset},#{size}) a
@@ -69,6 +70,7 @@
         </if>
         and a.type = 1
         and a.del_flag = 0
+        and at.del_flag = 0
         order by a.gmt_create desc
     </select>
 </mapper>

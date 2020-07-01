@@ -12,8 +12,8 @@ import java.util.List;
 @Component
 public interface ArticleMapper {
 
-    @Insert("insert into article (title,description,content,gmt_create,gmt_modified,creator,type) " +
-            "values (#{title},#{description},#{content},#{gmtCreate},#{gmtModified},#{creator},#{type})")
+    @Insert("insert into article (title,description,description_str,content,gmt_create,gmt_modified,creator,type) " +
+            "values (#{title},#{description},#{descriptionStr},#{content},#{gmtCreate},#{gmtModified},#{creator},#{type})")
     @Options(useGeneratedKeys = true,keyProperty = "id",keyColumn = "id")
     Integer createArticle(ArticleVO articleVO);
 
@@ -26,7 +26,7 @@ public interface ArticleMapper {
     @Select("select * from article where id = #{id}")
     ArticleVO findArticleById(@Param(value = "id") Integer id);
 
-    @Update("update article set gmt_modified = #{gmtModified},title = #{title},description = #{description},content = #{content} where id = #{id}")
+    @Update("update article set gmt_modified = #{gmtModified},title = #{title},description = #{description},description_str = #{descriptionStr},content = #{content} where id = #{id}")
     @Options(useGeneratedKeys = true,keyProperty = "id",keyColumn = "id")
     Integer updateArticle(ArticleVO dbArticle);
 
@@ -38,7 +38,7 @@ public interface ArticleMapper {
     int saveTag(TagVO tag);
 
     @Select("select * from tag where 1 = 1 and del_flag = 0 order by type ")
-    List<TagVO> getTags(Integer type);
+    List<TagVO> getTags();
 
     @Select("select count(1) from tag where tag_name = #{tagName}")
     @Options(keyColumn = "count(1)")
@@ -55,4 +55,7 @@ public interface ArticleMapper {
 
     @Select("select * from article where type = #{type} and del_flag = 0")
     ArticleVO findArticleByType(int code);
+
+    @Select("select distinct t.* from tag t inner join article_tags at on t.id = at.tag_id where at.del_flag = 0 and t.del_flag = 0")
+    List<TagVO> getUsedTags();
 }

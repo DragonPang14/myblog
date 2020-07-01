@@ -74,8 +74,13 @@ public class PublishController {
                 tagIdList.add(tagId);
             }
             String[] description = articleDto.getDescription().split("&lt;!--summary--&gt;");
-            String[] content = articleDto.getContent().split("<!--summary-->");
-            articleDto.setContent(content.length == 1?content[0]:content[1]);
+            if (articleDto.getContent().contains("<!--summary-->")){
+                String[] content = articleDto.getContent().split("<!--summary-->");
+                StringBuffer stringBuffer = new StringBuffer(content[0]);
+                stringBuffer.append("<!--summary-->");
+                articleDto.setContent(content[1]);
+                articleDto.setDescriptionStr(stringBuffer.toString());
+            }
             articleDto.setDescription(description[0]);
             if (user != null) {
                 articleDto.setCreator(user.getId());
@@ -137,11 +142,11 @@ public class PublishController {
     }
 
     @RequestMapping(value = "/getTags",method = RequestMethod.GET)
-    public @ResponseBody ResultDto getTags(@RequestParam(value = "type",required = false)Integer type){
+    public @ResponseBody ResultDto getTags(@RequestParam(value = "used",required = false)Integer used){
         ResultDto<List<TagDto>> resultDto;
         List<TagDto> tagDtos;
         try {
-            tagDtos = articleService.getTags(type);
+            tagDtos = articleService.getTags(used);
         } catch (Exception e) {
             e.printStackTrace();
             resultDto = new ResultDto<>(CustomizeStatusEnum.CODE_ERROR);

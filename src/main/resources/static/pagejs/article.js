@@ -13,7 +13,7 @@ window.onscroll = function (ev) {
     if (top < 0){
         $(".toc-wrapper").addClass("toc-fixed");
     }
-    if ($(document).scrollTop() < 300){
+    if ($(document).scrollTop() < 450){
         $(".toc-wrapper").removeClass("toc-fixed");
     }
 }

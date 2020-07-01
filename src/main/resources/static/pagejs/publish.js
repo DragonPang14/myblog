@@ -68,7 +68,7 @@ function saveTag() {
 function getTags() {
     $("#tag-content").empty();
     $.ajax({
-        url:"/getTags",
+        url:"/getTags?used=0",
         type:"get",
         dataType: "json",
         success:function (data) {

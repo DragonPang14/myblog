@@ -10,6 +10,7 @@ public class ArticleDto extends BaseDto {
 
     private String title;
     private String description;
+    private String descriptionStr;
     private String content;
     private Integer creator;
     private Integer commentCount;
