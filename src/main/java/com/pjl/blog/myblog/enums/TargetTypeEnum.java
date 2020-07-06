@@ -8,7 +8,9 @@ public enum TargetTypeEnum {
     //问题评论
     QUESTION_TYPE(1,"文章"),
     //评论回复
-    COMMENT_TYPE(2,"评论")
+    COMMENT_TYPE(2,"评论"),
+
+    DRAFT_TYPE(3,"草稿")
     ;
     private Integer type;
     private String remark;

@@ -1,0 +1,65 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="sidebar" id="sidebar">
+    <div class="sidebar" id="sidebar-menu">
+        <div class="sidebar-wrapper" id="sidebar-wrapper">
+            <ul class="sidebar-tabs" id="myTab" role="tablist">
+                <li class="sidebar-tab-user tab-active">
+                    <a class="tag-link active" id="login-tab" data-toggle="tab" href="#login" role="tab"
+                       aria-controls="login" aria-selected="true" th:text="${session.user != null?'Overview':'Login'}"></a>
+                </li>
+                <li class="sidebar-tab-message">
+                    <a class="tag-link" id="message-tab" data-toggle="tab" href="#message" role="tab"
+                       aria-controls="message" aria-selected="false">Message</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="login" role="tabpanel" aria-labelledby="login-tab">
+                    <div class="tab-wrapper">
+                        <div th:if="${session.user == null}">
+                            <img src="/img/login-user-new.png" class="avatar-login rounded-circle">
+                            <div class="pt-3">
+                                <input class="form-control" placeholder="账号" id="userName" name="userName">
+                            </div>
+                            <div class="pt-3">
+                                <input class="form-control" placeholder="密码" id="password" name="password"
+                                       type="password">
+                            </div>
+                            <div class="pt-3 float-right">
+                                <a href="javascript:userLogin();">login</a>
+                            </div>
+                            <div class="pt-3 float-left">
+                                <a href="javascript:;">reg</a>
+                            </div>
+                            <div class="pt-3">
+                                <span class="font-xm gray">快速登陆</span>
+                                &nbsp;&nbsp;&nbsp;
+                                <a href="https://github.com/login/oauth/authorize?client_id=b3b9a56728e320a8e2dc&redirect_uri=http://blog.starplatinum.space/callback&scope=user&state=123">
+                                    <img src="/img/github-icon.jpg" class="rounded-circle th-account-icon">
+                                </a>
+                            </div>
+                        </div>
+                        <div th:if="${session.user != null}">
+                            <img th:src="${session.user.avatarUrl}" class="avatar-login rounded-circle">
+                            <div class="pt-3">
+                                <span th:text="${session.user.name}"></span>
+                            </div>
+                            <div class="pt-3">
+                                <button class="btn btn-dark w-100">草稿箱</button>
+                            </div>
+                            <div>
+                                <button class="btn btn-dark w-100">我的发布</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="message" role="tabpanel" aria-labelledby="message-tab">
+                    <div class="tab-wrapper">
+                        请先登录
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

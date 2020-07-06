@@ -15,7 +15,7 @@ a:hover {
     display: flex;
     padding: 3rem 0 0 0;
     position: relative;
-    background-color: #fff;
+    background-color: #F7F7F7;
     top: 0;
     left: 0;
     align-items: flex-start;
@@ -63,7 +63,7 @@ a:hover {
     transform: translate3d(0, -1rem, 0)
 }
 
-.post-intro-meta , .post-intro-meta a{
+.post-intro-meta, .post-intro-meta a {
     margin-top: 0.2rem;
     font: 1.5rem "Agency FB";
     color: #fff;
@@ -114,7 +114,7 @@ a:hover {
 }
 
 
-.article-entry  {
+.article-entry {
     font-family: "Agency FB";
 }
 
@@ -170,7 +170,7 @@ a:hover {
 }
 
 .load-more:hover {
-    color:#f75357;
+    color: #f75357;
 }
 
 
@@ -194,7 +194,7 @@ a:hover {
     font-family: "Agency FB";
 }
 
-.intro-title h1 , .site-title h1{
+.intro-title h1, .site-title h1 {
     font-size: 5.3rem;
 }
 
@@ -220,13 +220,85 @@ a:hover {
     padding-right: 2.5rem;
 }
 
+/*顶端菜单栏色彩取反相*/
 .invert {
     filter: invert(100%);
-    border-bottom: 1px solid rgba(255,255,255,1);
+    border-bottom: 1px solid rgba(255, 255, 255, 1);
     background-color: #000000;
 }
 
-.index-link:hover{color:#f75357}
+.index-link:hover {
+    color: #f75357
+}
+
+/*侧边菜单栏*/
+.sidebar-wrapper {
+    position: relative;
+    height: 100%;
+    overflow: auto;
+}
+
+#sidebar-menu {
+    background-color: #222222;
+}
+
+#sidebar-menu .tag-link {
+    display: block;
+    padding: 0 20px;
+    color: #ffffff;
+    text-decoration: none;
+    font: 1.5rem "Agency FB"
+}
+
+.tab-active {
+    border-bottom-color: #f75357;
+    border-bottom-style: solid;
+    transform: translate(0, 2px);
+}
+
+#sidebar-menu .nav a:hover {
+    color: #f75357;
+}
+
+[data-simplersidebar='active'] {
+    box-shadow: 3px 0px 3px 0px rgba(0, 0, 0, 0.5);
+}
+
+.sidebar-tabs {
+    display: flex;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    height: 4rem;
+    width: 100%;
+    z-index: 1001;
+    justify-content: space-around;
+    align-items: flex-start;
+    font-family: "Agency FB";
+    flex-grow: 0;
+    color: #eee;
+    border-bottom: 2px solid #666;
+}
+
+.tab-content,.tab-wrapper a {
+    font: 1.2rem "Agency FB";
+    color: #ffffff;
+}
+
+.tab-wrapper {
+    padding: 10px;
+    text-align: center;
+}
+
+.sidebar-tab-user, .sidebar-tab-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    width: 50%;
+    height: 100%;
+    cursor: pointer;
+}
 
 .modal-text {
     padding-top: 0.5rem;
@@ -245,7 +317,7 @@ a:hover {
     color: #999;
 }
 
-.d-gray, .d-gray a{
+.d-gray, .d-gray a {
     color: #778087;
 }
 
@@ -283,7 +355,7 @@ a:hover {
     margin: 4px 0 0 0;
     width: 200px;
     font: 1rem "Agency FB";
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .profile-name {
@@ -303,8 +375,15 @@ a:hover {
 
 .avatar-big {
     width: 100%;
-    box-shadow: 0 0 2px 0 rgba(0,0,0,0.6);
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.6);
     display: block;
+}
+
+.avatar-login {
+    width: 70px;
+    height: 70px;
+    background-color: #f7f7f7;
+    box-shadow: 3px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 
 .th-account-icon {
@@ -320,14 +399,15 @@ a:hover {
     min-height: 100vh;
     transition: all 0.3s ease-in 0s;
     transform: translate3d(0, 0, 0);
+    background-color: #F7F7F7;
     position: relative;
-    box-shadow: -3px 0 2px 0 rgba(0,0,0,0.6);
+    box-shadow: -3px 0 2px 0 rgba(0, 0, 0, 0.6);
 }
 
 .toc-wrapper {
     display: block;
     position: absolute;
-    top: 55vh;
+    top: 50vh;
     width: 22%;
     right: 1%;
     overflow: hidden;
@@ -371,7 +451,7 @@ a:hover {
     height: 10px;
 }
 
-.sep20{
+.sep20 {
     height: 20px;
 }
 
@@ -382,7 +462,7 @@ a:hover {
     height: 1.5rem;
     line-height: 1.5rem;
     border-radius: .1875rem;
-    background-color: rgba(0,150,94,.1);
+    background-color: rgba(0, 150, 94, .1);
 }
 
 .selected-tag {
@@ -393,19 +473,6 @@ a:hover {
     border-radius: .2rem;
 }
 
-.sidebar {
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    left: 0;
-    top: 0;
-    z-index: 0;
-    height: 100%;
-    width: 400px;
-    transition: all 0.3s ease-in 0s;
-    overflow-x: hidden;
-    background-color: #222;
-}
 main {
     display: block;
 }
@@ -423,7 +490,7 @@ main {
 .index-post {
     position: relative;
     padding: 1rem 0rem 1rem 0rem;
-    border-bottom: 1px dashed rgba(0,0,0,0.2);
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.2);
     z-index: 3;
 }
 
@@ -475,11 +542,11 @@ main {
 }
 
 .post-intro-tags {
-    font-family:  "Agency FB"
+    font-family: "Agency FB"
 }
 
 .index-tags {
-    font-family:  "Agency FB"
+    font-family: "Agency FB"
 }
 
 .index-tags .post-tag {
@@ -534,10 +601,9 @@ main {
     opacity: 1
 }
 
-.post-intro-tags .post-tag::before,.abstract-tags .post-tag::before,.index-tags .post-tag::before{
+.post-intro-tags .post-tag::before, .abstract-tags .post-tag::before, .index-tags .post-tag::before {
     content: '#'
 }
-
 
 
 .profile-social {
@@ -550,7 +616,7 @@ main {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1)
 }
 
-.profile-social a, .profile-social i{
+.profile-social a, .profile-social i {
     color: #777777;
 }
 

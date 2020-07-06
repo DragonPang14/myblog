@@ -2,39 +2,9 @@
 
 <div th:fragment="header" id="header">
     <header class="index-header">
-        <div class="header-side-menu" id="">❯</div>
+        <div class="header-side-menu" id="toggle-sidebar">❯</div>
         <a class="index-link float-right" href="/">Star Platinum</a>
-        <a class="index-link float-right" th:if="${session.user == null}" href="javascript:login()">login</a>
         <a class="index-link float-right" th:if="${session.user != null}" href="/publish">publish</a>
     </header>
-    <!--modal-->
-    <div class="modal fade" id="login" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content modal-text">
-                <div class="modal-title">
-                    <span class="modal-link p-3">Admin login</span>
-                </div>
-                <div class="modal-body pl-5 pr-3">
-                    <div class="pt-3">
-                        <input class="form-control" placeholder="账号" id="userName" name="userName">
-                    </div>
-                    <div class="pt-3">
-                        <input class="form-control" placeholder="密码" id="password" name="password" type="password">
-                    </div>
-                </div>
-                <div class="pl-5 pr-5 pb-2">
-                    <span class="font-xm gray">快速登陆</span>
-                    &nbsp;&nbsp;&nbsp;
-                    <a href="https://github.com/login/oauth/authorize?client_id=b3b9a56728e320a8e2dc&redirect_uri=http://blog.starplatinum.space/callback&scope=user&state=123">
-                        <img src="/img/github-icon.png" class="rounded th-account-icon">
-                    </a>
-                </div>
-                <div class="modal-footer">
-                    <a href="javascript:userLogin()">login</a>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
-</body>
 </html>

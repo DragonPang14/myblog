@@ -7,6 +7,8 @@ $(function () {
     getTags();
 
     $(".intro-title").fadeIn(1000);
+
+
 })
 
 $(window).scroll(function () {
