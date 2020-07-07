@@ -8,7 +8,7 @@ $(function () {
     });
 
     var replyEditor = editormd("reply-edit-box", {
-        width: "100%",
+        width: "90%",
         height: "300px",
         placeholder: "支持markdown语法",
         emoji: true,

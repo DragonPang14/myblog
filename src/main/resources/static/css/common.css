@@ -590,8 +590,17 @@ main {
 }
 
 .reply-box-header .header-input {
-    width: 33.33%;
+    width: 33%;
     border-bottom: 1px dashed #dedede;
+}
+
+.vinput {
+    border: none;
+    resize: none;
+    outline: none;
+    padding: 10px 5px;
+    max-width: 100%;
+    font-size: .775em;
 }
 
 .index-post {
