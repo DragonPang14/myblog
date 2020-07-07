@@ -8,8 +8,19 @@ $(function () {
     });
 
     $(document).keydown(function (event) {
-        console.info("keydown");
-        if (event.keyCode == 13 && $("#sidebar-menu").data("simplersidebar")=="active"){
+        let cookieList = document.cookie;
+        let sidebarMenu = document.getElementById("sidebar-menu");
+        let simplersidebar = sidebarMenu.dataset.simplersidebar;
+        let cookie = cookieList.split(";");
+        let value = null;
+        for (let i = 0;i < cookie.length;i++){
+            let c = cookie[i].split("=");
+            if (c[0] == "pjl-blog-token"){
+                value = c[1];
+            }
+        }
+        if (event.keyCode == 13 && value == null && simplersidebar == 'active'){
+            console.info(document.cookie);
             userLogin();
         }
     })

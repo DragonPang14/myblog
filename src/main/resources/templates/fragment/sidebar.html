@@ -10,7 +10,8 @@
                 </li>
                 <li class="sidebar-tab-message">
                     <a class="tag-link" id="message-tab" data-toggle="tab" href="#message" role="tab"
-                       aria-controls="message" aria-selected="false">Message</a>
+                       aria-controls="message" aria-selected="false">Message
+                        <span th:if="${session.user != null}" class="badge badge-light">5</span></a>
                 </li>
             </ul>
             <div class="tab-content">

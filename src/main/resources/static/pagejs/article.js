@@ -6,6 +6,14 @@ $(function () {
         toc:true,
         tocContainer:"#toc-container",
     });
+
+    var replyEditor = editormd("reply-edit-box", {
+        width: "100%",
+        height: "300px",
+        placeholder: "支持markdown语法",
+        emoji: true,
+        path: "/js/lib/"  // Autoload modules mode, codemirror, marked... dependents libs path
+    });
 })
 
 window.onscroll = function (ev) {

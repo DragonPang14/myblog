@@ -17,11 +17,8 @@ public interface ArticleMapper {
     @Options(useGeneratedKeys = true,keyProperty = "id",keyColumn = "id")
     Integer createArticle(ArticleVO articleVO);
 
-    @Select("select * from article limit #{offset},#{size}")
-    List<ArticleVO> getList(@Param(value = "offset") Integer offset, @Param(value = "size") Integer size);
-
     @Select("select count(1) from article where creator = #{userId}")
-    Integer userQuestionCount(@Param(value = "userId") Integer userId);
+    Integer userArticleCount(@Param(value = "userId") Integer userId);
 
     @Select("select * from article where id = #{id}")
     ArticleVO findArticleById(@Param(value = "id") Integer id);

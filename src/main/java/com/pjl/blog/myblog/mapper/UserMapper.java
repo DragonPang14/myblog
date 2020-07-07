@@ -2,6 +2,7 @@ package com.pjl.blog.myblog.mapper;
 
 import com.pjl.blog.myblog.dto.AvatarDto;
 import com.pjl.blog.myblog.dto.UserDto;
+import com.pjl.blog.myblog.model.NotificationVO;
 import com.pjl.blog.myblog.model.UserVO;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
@@ -46,4 +47,7 @@ public interface UserMapper {
     @Update("update user set avatar_url = #{avatarUrl} where id = #{userId}")
     int modifyAvatar(AvatarDto avatarDto);
 
+    @Insert("insert into notification (target_id,target_type,sender_id,receive_id,noti_content,action,gmt_create) values " +
+            "(#{targetId},#{targetType},#{senderId},#{receiveId},#{notiContent},#{action},#{gmtCreate})")
+    void insertNotification(NotificationVO notification);
 }

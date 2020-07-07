@@ -9,6 +9,7 @@ $(function () {
         imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
         imageUploadURL: "/uploadImage",
         saveHTMLToTextarea:true,
+        emoji: true,
         toolbarIconTexts:{
             addSummary:"摘要"
         },

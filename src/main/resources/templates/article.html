@@ -45,6 +45,42 @@
             <div class="article-entry" id="text-md-view">
                 <textarea style="display: none;" th:text="${articleDto.content}"></textarea>
             </div>
+            <div class="reply-wrapper">
+                <div class="reply-count">
+                    2评论
+                </div>
+                <div class="reply-cards">
+                    <div class="reply-card">
+                        <img th:src="${session.user.avatarUrl}" class="reply-avatar">
+                        <div class="reply-right">
+                            <div class="reply-head">
+                                <span class="reply-nick" th:text="${session.user.name}"></span>
+                                <span class="reply-sys">123.864.15.547</span>
+                            </div>
+                            <div class="reply-meta">
+                                <span class="reply-time" th:text="${#dates.format(session.user.gmtCreate)}"></span>
+                            </div>
+                            <div class="reply-content">
+                                撒大大大大大萨达萨达现在辞职
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="reply">
+                    <div class="reply-box">
+                        <div class="r-wrapper">
+                            <div class="reply-box-header">
+                                <input name="nick" placeholder="昵称" class="header-input" type="text">
+                                <input name="mail" placeholder="邮箱" class="header-input" type="email">
+                                <input name="link" placeholder="网址(http://)" class="header-input" type="text">
+                            </div>
+                            <div id="reply-edit-box">
+                                <textarea style="display: none;" id="reply-content"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 </div>
