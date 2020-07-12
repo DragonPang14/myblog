@@ -51,7 +51,7 @@ public class PublishController {
     @GetMapping("/publish/{id}")
     public String editArticle(@PathVariable(name = "id") Integer id,
                                Model model){
-        ArticleDto articleDto = articleService.findArticleById(id);
+        ArticleDto articleDto = articleService.findArticleById(id,false);
         if (articleDto != null){
             model.addAttribute("articleDto",articleDto);
         }

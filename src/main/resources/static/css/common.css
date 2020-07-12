@@ -291,6 +291,10 @@ a:hover {
     text-align: center;
 }
 
+#message .tab-wrapper{
+    text-align: left;
+}
+
 .sidebar-tab-user, .sidebar-tab-message {
     display: flex;
     align-items: center;
@@ -299,6 +303,30 @@ a:hover {
     width: 50%;
     height: 100%;
     cursor: pointer;
+}
+
+.notifications {
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.4);
+    padding-bottom: 0.5rem;
+}
+
+.notifications a:hover {
+    color: #cccccc;
+}
+
+.sidebar-page-nav {
+    padding: 1rem 0 0.5rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+.sidebar-page-nav>* {
+    margin-right: 0.5rem;
+}
+
+.notification-content {
+    background-color: #000000;
+    border-radius: 0.25rem;
 }
 
 .modal-text {
@@ -500,6 +528,7 @@ main {
 
 .reply-cards {
     width: 100%;
+    padding: 10px;
 }
 
 .reply-card {
@@ -516,6 +545,7 @@ main {
     margin-right: .7525em;
     border: 1px solid #f5f5f5;
     padding: .125em;
+    background-color: #ffffff;
 }
 
 .reply-right {
@@ -569,6 +599,12 @@ main {
     padding-top: .625em;
 }
 
+.bg-l-gray {
+    background-color: #F7F7F7;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.2);
+;
+}
+
 .reply-box,* {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -593,6 +629,21 @@ main {
     width: 33%;
     border-bottom: 1px dashed #dedede;
 }
+
+.reply-close {
+    display: block;
+    text-align: right;
+}
+
+.n-font {
+    font: 1.2rem "Agency FB";
+}
+
+.n-font-bold {
+    font: 1.3rem "Agency FB";
+    font-weight: bold;
+}
+
 
 .vinput {
     border: none;

@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/common.css">
     <link rel="stylesheet" href="/css/zico.min.css">
+    <link rel="stylesheet" href="/css/editormd.min.css">
     <link rel="stylesheet" href="/css/editormd.preview.min.css">
 </head>
 <body class="post-body">
@@ -47,35 +48,68 @@
             </div>
             <div class="reply-wrapper">
                 <div class="reply-count">
-                    2评论
+                    <span th:text="${commentDtoList.size()}" ></span>回复
                 </div>
                 <div class="reply-cards">
-                    <div class="reply-card">
-                        <img th:src="${session.user.avatarUrl}" class="reply-avatar">
+                    <div class="reply-card" th:each="commentDto:${commentDtoList}">
+                        <img th:src="${commentDto.creator.avatarUrl}" class="reply-avatar">
                         <div class="reply-right">
                             <div class="reply-head">
-                                <span class="reply-nick" th:text="${session.user.name}"></span>
-                                <span class="reply-sys">123.864.15.547</span>
+                                <span class="reply-nick" th:text="${commentDto.creator.name}"></span>
+                                <span class="reply-sys" th:text="${commentDto.creator.ipAddress}"></span>
                             </div>
                             <div class="reply-meta">
-                                <span class="reply-time" th:text="${#dates.format(session.user.gmtCreate)}"></span>
+                                <a href="javascript:;" class="float-right n-font gray" th:onclick="moveReplyBox([[${commentDto.id}]],[[${commentDto.creator.id}]])">回复</a>
+                                <span class="reply-time" th:text="${#dates.format(commentDto.gmtCreate)}"></span>
                             </div>
                             <div class="reply-content">
-                                撒大大大大大萨达萨达现在辞职
+                                <span th:text="${commentDto.content}"></span>
                             </div>
+                            <!--二级回复-->
+                            <div th:each="slcomment:${commentDto.secondLevelComments}">
+                                <div class="bg-l-gray">
+                                    <div class="reply-card" >
+                                        <img th:src="${slcomment.creator.avatarUrl}" class="reply-avatar">
+                                        <div class="reply-right">
+                                            <div class="reply-head">
+                                                <span class="reply-nick" th:text="${slcomment.creator.name}"></span>
+                                            </div>
+                                            <div class="reply-meta">
+                                                <a href="javascript:;" class="float-right n-font gray" th:onclick="moveReplyBox([[${commentDto.id}]],[[${slcomment.creator.id}]])">回复</a>
+                                                <span class="reply-time" th:text="${#dates.format(slcomment.gmtCreate)}"></span>
+                                            </div>
+                                            <div class="reply-content">
+                                                <span class="gray" th:text="${'回复' + slcomment.receiver.name} + ':'"></span>
+                                                <span th:text="${slcomment.content}"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:id="${'comments-reply-content-' + commentDto.id}"></div>
+                            <!--评论回复框移动到这-->
                         </div>
                     </div>
                 </div>
                 <div id="reply">
                     <div class="reply-box">
                         <div class="r-wrapper">
-                            <div class="reply-box-header">
-                                <input name="nick" placeholder="昵称" class="header-input vinput" type="text">
-                                <input name="mail" placeholder="邮箱" class="header-input vinput" type="email">
-                                <input name="link" placeholder="网址(http://)" class="header-input vinput" type="text">
+                            <div class="reply-close" style="display: none">
+                                <a href="javascript:;" th:onclick="resetReplyBox([[${articleDto.id}]],[[${articleDto.user.id}]])"><i class="zi zi_windowclose"></i></a>
                             </div>
-                            <div id="reply-edit-box">
-                                <textarea style="display: none;" id="reply-edit-content"></textarea>
+                            <div class="reply-box-header" th:if="${session.user == null}">
+                                <input name="name" placeholder="昵称" class="header-input vinput" type="text">
+                                <input name="mail" placeholder="邮箱" class="header-input vinput" type="email">
+                                <input name="blog" placeholder="网址(http://)" class="header-input vinput" type="text">
+                            </div>
+                            <div class="pt-3">
+                                <textarea id="reply-edit-content" class="form-control" rows="10" placeholder="欢迎交流"></textarea>
+                                <input type="hidden" id="target_id" name="target_id" th:value="${articleDto.id}">
+                                <input type="hidden" id="receiver_id" name="receiver_id" th:value="${articleDto.user.id}">
+                            </div>
+                            <div class="pt-3">
+                                <div id="commit-article-reply" class="n-font float-right" type="button" th:onclick="sendComment([[${articleDto.id}]],1)">Commit</div>
+                                <div id="commit-comment-reply" class="n-font float-right" type="button" th:onclick="sendComment([[${articleDto.id}]],2)" style="display: none">Commit</div>
                             </div>
                         </div>
                     </div>

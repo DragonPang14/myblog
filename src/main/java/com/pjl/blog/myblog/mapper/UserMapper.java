@@ -21,7 +21,7 @@ public interface UserMapper {
     @Select("select * from user where id = #{creator}")
     UserVO findById(Integer creator);
 
-    @Update("update user set name = #{name},token = #{token},gmt_modified = #{gmtModified},avatar_url = #{avatarUrl},user_name = #{userName} " +
+    @Update("update user set name = #{name},token = #{token},gmt_modified = #{gmtModified},avatar_url = #{avatarUrl},user_name = #{userName},ip_address = #{ipAddress} " +
             "where id = #{id}")
     void updateUser(UserVO dbUser);
 
@@ -36,8 +36,8 @@ public interface UserMapper {
     @Options(keyColumn = "count(1)")
     int findByMobile(String mobile);
 
-    @Insert("insert into user (name,gmt_create,gmt_modified,avatar_url,user_name,password,mobile,bio,mail,user_type) values" +
-            "(#{name},#{gmtCreate},#{gmtModified},#{avatarUrl},#{userName},#{password},#{mobile},#{bio},#{mail},#{userType})")
+    @Insert("insert into user (name,gmt_create,gmt_modified,avatar_url,user_name,password,mobile,bio,mail,user_type,ip_address) values" +
+            "(#{name},#{gmtCreate},#{gmtModified},#{avatarUrl},#{userName},#{password},#{mobile},#{bio},#{mail},#{userType},#{ipAddress})")
     @Options(useGeneratedKeys = true,keyColumn = "id",keyProperty = "id")
     int registered(UserVO user);
 
@@ -50,4 +50,13 @@ public interface UserMapper {
     @Insert("insert into notification (target_id,target_type,sender_id,receive_id,noti_content,action,gmt_create) values " +
             "(#{targetId},#{targetType},#{senderId},#{receiveId},#{notiContent},#{action},#{gmtCreate})")
     void insertNotification(NotificationVO notification);
+
+    @Select("select * from user where mail = #{mail} and del_flag = 0")
+    UserVO findByMail(String mail);
+
+    @Update("update notification set status = 1 where target_id = #{id} and del_flag = 0")
+    void readNotification(Integer id);
+
+    @Select("select user_type from user where id = #{id} and del_flag = 0")
+    int verifyUserType(Integer id);
 }

@@ -1,8 +1,6 @@
 package com.pjl.blog.myblog.controller;
 
-import com.pjl.blog.myblog.dto.AvatarDto;
-import com.pjl.blog.myblog.dto.ResultDto;
-import com.pjl.blog.myblog.dto.UserDto;
+import com.pjl.blog.myblog.dto.*;
 import com.pjl.blog.myblog.enums.CustomizeStatusEnum;
 import com.pjl.blog.myblog.exception.CustomizeErrorCode;
 import com.pjl.blog.myblog.exception.CustomizeException;
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -108,6 +107,26 @@ public class UserController {
         }else {
             return new ResultDto(CustomizeStatusEnum.CODE_ERROR);
         }
+    }
+
+    @GetMapping("/notifications")
+    public @ResponseBody ResultDto<NotificationDto> notifications(@CookieValue(value = "pjl-blog-token")String token,
+                                @RequestParam(value = "page",required = false,defaultValue = "1")Integer page, Model model){
+        UserVO user = userService.findByToken(token);
+        if (user == null){
+            throw new CustomizeException(CustomizeErrorCode.USER_NOT_FOUND);
+        }
+        PaginationDto<NotificationDto> pagination = userService.notificationsList(user.getId(),page);
+        return ResultDto.okOf(pagination);
+    }
+
+    @GetMapping("/unReadNotifications")
+    public @ResponseBody ResultDto unReadNotifications(@CookieValue(value = "pjl-blog-token")String token){
+        UserVO user = userService.findByToken(token);
+        if (user == null){
+            throw new CustomizeException(CustomizeErrorCode.USER_NOT_FOUND);
+        }
+        return ResultDto.okOf(userService.totalNotifications(user.getId(),0));
     }
 
 }

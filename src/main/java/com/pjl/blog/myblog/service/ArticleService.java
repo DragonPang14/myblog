@@ -69,10 +69,13 @@ public class ArticleService {
         return pagination;
     }
 
-    public ArticleDto findArticleById(Integer id) {
+    public ArticleDto findArticleById(Integer id,boolean isNotify) {
         ArticleVO articleVO = articleMapper.findArticleById(id);
         if (articleVO == null) {
             throw new CustomizeException(CustomizeErrorCode.ARTICLE_NOT_FOUND);
+        }
+        if (isNotify){
+            userMapper.readNotification(articleVO.getId());
         }
         return buildArticleDto(articleVO);
     }
@@ -80,6 +83,7 @@ public class ArticleService {
 
     public void createOrUpdate(ArticleDto articleDto, List<Integer> tagIdList) {
         Integer id;
+        //如果找到了修改的文章或者是about me文章
         if (!StringUtils.isEmpty(articleDto.getId()) ||
                 (articleDto.getType() == ArticleTypeEnum.ABOUT_ME.getCode() &&
                         articleMapper.findArticleByType(ArticleTypeEnum.ABOUT_ME.getCode()) != null) ) {
@@ -176,6 +180,11 @@ public class ArticleService {
         return buildArticleDto(articleVO);
     }
 
+    /**
+     * @desc 构建dto
+     * @param articleVO
+     * @return
+     */
     private ArticleDto buildArticleDto(ArticleVO articleVO){
         ArticleDto articleDto = new ArticleDto();
         UserVO user = userMapper.findById(articleVO.getCreator());

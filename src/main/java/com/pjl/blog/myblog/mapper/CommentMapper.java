@@ -11,16 +11,16 @@ import java.util.List;
 public interface CommentMapper {
 
 
-    @Insert("insert into comment (parent_id,content,type,creator,like_count,gmt_create,gmt_modified) values " +
-            "(#{parentId},#{content},#{type},#{creator},#{likeCount},#{gmtCreate},#{gmtModified})")
+    @Insert("insert into comment (article_id,parent_id,receiver_id,content,type,creator,like_count,gmt_create,gmt_modified) values " +
+            "(#{articleId},#{parentId},#{receiverId},#{content},#{type},#{creator},#{likeCount},#{gmtCreate},#{gmtModified})")
     @Options(keyColumn = "id",useGeneratedKeys = true,keyProperty = "id")
     void insert(CommentVO comment);
 
     //根据父ID查找评论
     @Select("select * from comment where parent_id = #{parentId} and type = #{type} order by gmt_create asc")
-    List<CommentVO> findCommentById(@Param(value = "parentId") Integer parentId, @Param(value = "type") Integer type);
+    List<CommentVO> findCommentById(Integer parentId, Integer type);
 
     //查找需要回复的评论
-    @Select("select * from comment where id = #{parentId} and type = #{type}")
-    CommentVO findCommentByCommentId(@Param(value = "parentId") Integer parentId, @Param(value = "type") Integer type);
+    @Select("select * from comment where id = #{parentId} ")
+    CommentVO findCommentByCommentId(Integer parentId);
 }

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pjl.blog.myblog.dao.CommentDao">
+    <resultMap id="CommentDto" type="com.pjl.blog.myblog.dto.CommentDto">
+        <id property="id" column="cid"></id>
+        <result property="articleId" column="article_id"></result>
+        <result property="parentId" column="parent_id"></result>
+        <result property="content" column="content"></result>
+        <result property="likeCount" column="like_count"></result>
+        <result property="gmtCreate" column="gmt_create"></result>
+        <association property="creator" javaType="com.pjl.blog.myblog.model.UserVO">
+            <id property="id" column="uid"></id>
+            <result property="accountId" column="account_id"></result>
+            <result property="name" column="name"></result>
+            <result property="token" column="token"></result>
+            <result property="avatarUrl" column="avatar_url"></result>
+            <result property="ipAddress" column="ip_address"></result>
+        </association>
+        <collection property="secondLevelComments" ofType="com.pjl.blog.myblog.dto.CommentDto">
+            <id property="id" column="s_cid"></id>
+            <result property="articleId" column="s_article_id"></result>
+            <result property="parentId" column="s_parent_id"></result>
+            <result property="content" column="s_content"></result>
+            <result property="likeCount" column="s_like_count"></result>
+            <result property="gmtCreate" column="s_gmt_create"></result>
+            <association property="creator" javaType="com.pjl.blog.myblog.model.UserVO">
+                <id property="id" column="s_uid"></id>
+                <result property="accountId" column="s_account_id"></result>
+                <result property="name" column="s_name"></result>
+                <result property="token" column="s_token"></result>
+                <result property="avatarUrl" column="s_avatar_url"></result>
+                <result property="ipAddress" column="s_ip_address"></result>
+            </association>
+            <association property="receiver" javaType="com.pjl.blog.myblog.model.UserVO">
+                <id property="id" column="sr_uid"></id>
+                <result property="accountId" column="sr_account_id"></result>
+                <result property="name" column="sr_name"></result>
+                <result property="token" column="sr_token"></result>
+                <result property="avatarUrl" column="sr_avatar_url"></result>
+                <result property="ipAddress" column="sr_ip_address"></result>
+            </association>
+        </collection>
+    </resultMap>
+
+
+    <select id="getCommentByArticleId" resultMap="CommentDto">
+        select c.id cid,c.article_id,c.parent_id,c.content,c.like_count,c.gmt_create,
+        sc.id s_cid,sc.article_id s_article_id,sc.parent_id s_parent_id,sc.content s_content,sc.like_count s_like_count,sc.gmt_create s_gmt_create,
+        cu.id uid,cu.account_id,cu.name,cu.token,cu.avatar_url,cu.ip_address,
+        scu.id s_uid,scu.account_id s_account_id,scu.name s_name,scu.token s_token,scu.avatar_url s_avatar_url,scu.ip_address s_ip_address,
+        srcu.id sr_uid,srcu.account_id sr_account_id,srcu.name sr_name,srcu.token sr_token,srcu.avatar_url sr_avatar_url,srcu.ip_address sr_ip_address
+        from comment c left join comment sc
+        on c.id = sc.parent_id and sc.del_flag = 0
+        left join user cu on c.creator = cu.id
+        left join user scu on sc.creator = scu.id
+        left join user srcu on sc.receiver_id = srcu.id
+        where c.article_id = #{id} and c.type = 1 and c.del_flag = 0
+        order by c.gmt_create asc
+    </select>
+
+</mapper>

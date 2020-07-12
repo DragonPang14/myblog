@@ -1,5 +1,6 @@
 package com.pjl.blog.myblog.service;
 
+import com.pjl.blog.myblog.dao.CommentDao;
 import com.pjl.blog.myblog.dto.CommentDto;
 import com.pjl.blog.myblog.dto.ResultDto;
 import com.pjl.blog.myblog.enums.NotificationTypeEnum;
@@ -34,6 +35,9 @@ public class CommentService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private CommentDao commentDao;
+
     @Transactional
     public ResultDto insertComment(CommentVO comment) {
         ResultDto resultDto = new ResultDto();
@@ -44,20 +48,29 @@ public class CommentService {
             //判断是否找得到评论的主题
             ArticleVO questionById = articleMapper.findArticleById(comment.getParentId());
             haveFlag = questionById != null;
-            notification = this.createNotify(comment, questionById.getCreator());
+            notification = this.createNotify(comment);
         }else {
-            //判断是否招的到回复的评论
-            CommentVO commentByCommentId = commentMapper.findCommentByCommentId(comment.getParentId(), TargetTypeEnum.QUESTION_TYPE.getType());
+            //判断是否找的到回复的评论
+            CommentVO commentByCommentId = commentMapper.findCommentByCommentId(comment.getParentId());
             haveFlag =commentByCommentId != null;
-            notification = this.createNotify(comment, commentByCommentId.getCreator());
+            if (haveFlag){
+                int userType = userMapper.verifyUserType(commentByCommentId.getCreator());
+                //游客不用发消息通知
+                if (userType != 3){
+                    notification = this.createNotify(comment);
+                }
+            }
         }
+        //找得到评论的目标
         if (haveFlag){
             commentMapper.insert(comment);
             BeanUtils.copyProperties(comment,commentDto);
-            commentDto.setUser(userMapper.findById(comment.getCreator()));
+            commentDto.setCreator(userMapper.findById(comment.getCreator()));
             resultDto.setCode(100);
             resultDto.setObj(commentDto);
-            userMapper.insertNotification(notification);
+            if (notification != null){
+                userMapper.insertNotification(notification);
+            }
         }else {
             if (comment.getType() == TargetTypeEnum.QUESTION_TYPE.getType()){
                 resultDto.setCode(2002);
@@ -72,9 +85,9 @@ public class CommentService {
     }
 
     //构建通知信息
-    private NotificationVO createNotify(CommentVO comment,Integer reveiveId){
+    private NotificationVO createNotify(CommentVO comment){
         NotificationVO notification = new NotificationVO();
-        notification.setReceiveId(reveiveId);
+        notification.setReceiveId(comment.getReceiverId());
         notification.setSenderId(comment.getCreator());
         notification.setTargetId(comment.getParentId());
         notification.setTargetType(comment.getType());  //通知目标类型  --文章 ：评论
@@ -86,7 +99,10 @@ public class CommentService {
 
 
     public List<CommentDto> getComments(Integer id, Integer commentType) {
-        List<CommentVO> comments = commentMapper.findCommentById(id,commentType);
+        List<CommentDto> commentDtos = commentDao.getCommentByArticleId(id);
+
+        //改为通过xml一次性查询
+        /*List<CommentVO> comments = commentMapper.findCommentById(id,commentType);
         if (comments.size() == 0){
             return new ArrayList<>();
         }
@@ -102,7 +118,7 @@ public class CommentService {
             BeanUtils.copyProperties(comment,commentDto);
             commentDto.setUser(userMap.get(comment.getCreator()));
             return commentDto;
-        }).collect(Collectors.toList());
+        }).collect(Collectors.toList());*/
         return commentDtos;
     }
 }

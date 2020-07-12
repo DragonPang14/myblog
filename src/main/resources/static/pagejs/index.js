@@ -35,7 +35,7 @@ $(window).scroll(function () {
 
 
 function getArticleList(page,tag) {
-    $(".spinner-border").css("display","block");
+    $("#spinner").css("display","block");
     var url = "/getArticleList?page="+page;
     if (tag != null){
         url += "&tag="+tag;

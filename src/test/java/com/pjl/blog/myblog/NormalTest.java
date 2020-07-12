@@ -1,11 +1,17 @@
 package com.pjl.blog.myblog;
 
+import com.pjl.blog.myblog.service.MailService;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class NormalTest{
+public class NormalTest extends MyblogApplicationTests{
+
+
+    @Autowired
+    private MailService mailService;
 
     @Test
     public void normalTest(){
@@ -18,5 +24,10 @@ public class NormalTest{
 
     @Test
     public void springTtest(){
+    }
+
+    @Test
+    public void springMailTest(){
+        mailService.sendSimpleMail("GLDZPang@outlook.com","测试邮件","测试邮件内容测试测试测试测试测试");
     }
 }

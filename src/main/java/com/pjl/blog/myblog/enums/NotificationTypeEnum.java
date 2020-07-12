@@ -4,7 +4,7 @@ public enum NotificationTypeEnum {
 
     LIKE_ACTION(1,"点赞了"),
 
-    COMMENT_ACTION(2,"评论了")
+    COMMENT_ACTION(2,"回复了")
 
     ;
 

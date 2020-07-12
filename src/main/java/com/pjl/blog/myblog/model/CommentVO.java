@@ -5,8 +5,9 @@ import lombok.Data;
 @Data
 public class CommentVO extends BaseVO {
 
-    private Integer questionId;
+    private Integer articleId;
     private Integer parentId;
+    private Integer receiverId;
     private String content;
     private int type;
     private Integer creator;
