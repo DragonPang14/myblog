@@ -65,6 +65,7 @@ function userLogin() {
 $("#toggle-sidebar").click(function () {
     if (getCookie("pjl-blog-token") != null){
         getNotificationCount();
+        getDraftCount();
     }
 });
 
@@ -88,6 +89,19 @@ function getNotificationCount() {
         success: function (data) {
             if (data.code == 100 && data.obj > 0) {
                 $("#message-tab").find("span").text(data.obj);
+            }
+        }
+    })
+}
+
+//草稿箱数量
+function getDraftCount() {
+    $.get({
+        url:"/getDraftCount",
+        dataType:"json",
+        success:function (data) {
+            if (data.code == 100 && data.obj > 0){
+                $("#draftBox").find("span").text(data.obj);
             }
         }
     })

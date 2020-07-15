@@ -47,7 +47,9 @@
                                 <span th:text="${session.user.name}"></span>
                             </div>
                             <div class="pt-3">
-                                <button class="btn btn-dark w-100">草稿箱</button>
+                                <button id="draftBox" class="btn btn-dark w-100">草稿箱
+                                    <span th:if="${session.user != null}" class="badge badge-light"></span>
+                                </button>
                             </div>
                             <div>
                                 <button class="btn btn-dark w-100">我的发布</button>

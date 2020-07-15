@@ -26,6 +26,8 @@ public enum CustomizeStatusEnum {
 
     HOT_RANK_ERROR(2004,"侧边栏热门文章显示失败"),
 
+    NOTHING_TO_SAVE(2005,"无需保存"),
+
     UPLOAD_ERROR(3001,"上传失败");
 
     private Integer statusCode;

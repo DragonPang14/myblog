@@ -15,6 +15,7 @@ import com.pjl.blog.myblog.utils.FastDfsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @desc 发布页面
@@ -38,16 +40,29 @@ public class PublishController {
     @Autowired
     private FastDfsUtils fastDfsUtils;
 
+    /**
+     * @desc 跳转发布页面
+     * @param token
+     * @return
+     */
     @GetMapping("/publish")
-    public String publish(@CookieValue(value = "pjl-blog-token",required = false)String token) {
+    public String publish(@CookieValue(value = "pjl-blog-token",required = false)String token,
+                          Model model) {
         if (token == null)
             throw new CustomizeException(CustomizeErrorCode.USER_NOT_LOGIN);
         UserVO userVO = userService.findByToken(token);
         if (userVO != null && userVO.getUserType() != 0)
             throw new CustomizeException(CustomizeErrorCode.USER_UNAUTHORIZED);
+        model.addAttribute("publishToken", UUID.randomUUID().toString());
         return "publish";
     }
 
+    /**
+     * @desc 编辑文章
+     * @param id
+     * @param model
+     * @return
+     */
     @GetMapping("/publish/{id}")
     public String editArticle(@PathVariable(name = "id") Integer id,
                                Model model){
@@ -58,6 +73,12 @@ public class PublishController {
         return "publish";
     }
 
+    /**
+     * @desc 发布文章
+     * @param articleDto
+     * @param token
+     * @return
+     */
     @RequestMapping(value = "/doPublish",method = RequestMethod.POST)
     public @ResponseBody ResultDto doPublish(@RequestBody ArticleDto articleDto,
                                @CookieValue(value = "pjl-blog-token", required = false) String token) {
@@ -141,6 +162,7 @@ public class PublishController {
         return resultDto;
     }
 
+    //获取标签
     @RequestMapping(value = "/getTags",method = RequestMethod.GET)
     public @ResponseBody ResultDto getTags(@RequestParam(value = "used",required = false)Integer used){
         ResultDto<List<TagDto>> resultDto;
@@ -155,5 +177,41 @@ public class PublishController {
         resultDto = new ResultDto<>(CustomizeStatusEnum.SUCCESS_CODE);
         resultDto.setObj(tagDtos);
         return resultDto;
+    }
+
+    @RequestMapping(value = "/autoSaveDraft",method = RequestMethod.POST)
+    public @ResponseBody ResultDto autoSaveDraft(@RequestBody ArticleDto articleDto,
+                                                 @CookieValue(value = "pjl-blog-token",required = false)String token){
+        if (StringUtils.isEmpty(articleDto.getTitle()) && StringUtils.isEmpty(articleDto.getContent())){
+            return new ResultDto(CustomizeStatusEnum.NOTHING_TO_SAVE);
+        }
+        if (token == null) {
+            return new ResultDto(CustomizeStatusEnum.UNLOGIN_CODE);
+        }
+        UserVO user = userService.findByToken(token);
+        try {
+            articleService.autoSaveDraft(articleDto,user);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            return new ResultDto(CustomizeStatusEnum.CODE_ERROR);
+        }
+        return new ResultDto(CustomizeStatusEnum.SUCCESS_CODE);
+    }
+
+    //持久化草稿
+    @RequestMapping(value = "/persistenceDraft",method = RequestMethod.PUT)
+    public @ResponseBody ResultDto persistenceDraft(@RequestParam String publishToken,
+                                                    @CookieValue(value = "pjl-blog-token", required = false) String token){
+        if (token == null) {
+            return new ResultDto(CustomizeStatusEnum.UNLOGIN_CODE);
+        }
+        UserVO user = userService.findByToken(token);
+        try {
+            articleService.persistenceDraft(publishToken,user.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultDto(CustomizeStatusEnum.CODE_ERROR);
+        }
+        return new ResultDto(CustomizeStatusEnum.SUCCESS_CODE);
     }
 }

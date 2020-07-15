@@ -129,4 +129,13 @@ public class UserController {
         return ResultDto.okOf(userService.totalNotifications(user.getId(),0));
     }
 
+    @GetMapping("/getDraftCount")
+    public @ResponseBody ResultDto getDraftCount(@CookieValue(value = "pjl-blog-token")String token){
+        UserVO user = userService.findByToken(token);
+        if (user == null){
+            throw new CustomizeException(CustomizeErrorCode.USER_NOT_FOUND);
+        }
+        return ResultDto.okOf(userService.totalDraftCount(user.getId(),3));
+    }
+
 }

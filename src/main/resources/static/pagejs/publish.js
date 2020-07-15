@@ -1,3 +1,5 @@
+let contentTime;
+let titleTime;
 $(function () {
     getTags();
 
@@ -23,6 +25,9 @@ $(function () {
                 addSummary:"Alt+/ 可以添加摘要分隔符"
             }
         },
+        onchange:function(){
+            inputTimer();
+        },
         onload : function() {
             var keyMap = {
                 "Alt-/": function() {
@@ -33,8 +38,69 @@ $(function () {
         },
         path: "/js/lib/"  // Autoload modules mode, codemirror, marked... dependents libs path
     });
+
 });
 
+
+$("#title").keyup(function () {
+    clearTimeout(titleTime);
+    titleTime = setTimeout(function () {
+        autoSaveDraft();
+    },3000);
+});
+
+//定时存储localStorage
+function inputTimer() {
+    clearTimeout(contentTime);
+    contentTime = setTimeout(function () {
+        this.autoSaveDraft();
+    },3000);
+}
+
+
+window.onbeforeunload=function(ev){
+    console.info($("#content").val());
+    this.persistenceDraft();
+    console.info("after");
+}
+
+
+function autoSaveDraft() {
+    console.info("ajax");
+    $("#saved").css("display","none");
+    $("#saveing").css("display","block");
+    let title = $("#title").val();
+    let content = $("#content").val();
+    let publishToken = $("#publish-token").val();
+    $.ajax({
+        url:"/autoSaveDraft",
+        type:"post",
+        contentType: "application/json",
+        data:JSON.stringify({"title":title,"content":content,"type":3,"publishToken":publishToken}),
+        dataType:"json",
+        success:function (data) {
+            if (data.code == 100){
+                $("#saveing").css("display","none");
+                $("#saved").css("display","block");
+            }
+            console.info("success");
+        },
+        error:function () {
+            console.info("error");
+        }
+    })
+}
+
+function persistenceDraft() {
+    let publishToken = $("#publish-token").val();
+    $.ajax({
+        url:"/persistenceDraft",
+        type:"put",
+        dataType:"json",
+        data:{publishToken:publishToken}
+    });
+
+}
 
 function saveTag() {
     var flag = true;
@@ -119,6 +185,8 @@ function publishWithMd() {
         data: JSON.stringify({"id":articleId,"title": title,"description":description,"content": content,"tag":tag,"type":type}),
         success: function (data) {
             if (data.code == 100) {
+                storage.removeItem("pjl-blog-title");
+                storage.removeItem("pjl-blog-content");
                 window.location.href = "/";
             } else {
                 alert(data.msg);
@@ -219,3 +287,4 @@ var bind_tag_close_event = function(){
 
 bind_search_event()
 bind_tag_click_event()
+

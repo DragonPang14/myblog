@@ -20,4 +20,5 @@ public class ArticleDto extends BaseDto {
     private List<TagDto> tagList;
     private UserVO user;
     private int type;
+    private String publishToken;
 }

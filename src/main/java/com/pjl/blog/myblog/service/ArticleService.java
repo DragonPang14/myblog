@@ -1,5 +1,6 @@
 package com.pjl.blog.myblog.service;
 
+import com.alibaba.fastjson.JSON;
 import com.pjl.blog.myblog.dao.ArticleDao;
 import com.pjl.blog.myblog.dto.ArticleDto;
 import com.pjl.blog.myblog.dto.PaginationDto;
@@ -14,13 +15,18 @@ import com.pjl.blog.myblog.model.ArticleVO;
 import com.pjl.blog.myblog.model.TagVO;
 import com.pjl.blog.myblog.model.UserVO;
 import com.pjl.blog.myblog.utils.CommonUtils;
+import com.pjl.blog.myblog.utils.RedisUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class ArticleService {
@@ -34,16 +40,22 @@ public class ArticleService {
     @Autowired
     private ArticleDao articleDao;
 
+    @Autowired
+    private RedisUtils redisUtils;
+
+    @Value("${DRAFT_KEY}")
+    private String DRAFT_KEY;
+
     public PaginationDto<ArticleDto> getList(Integer userId, Integer page, Integer size, Integer tagId) {
 
-        Integer totalCount = articleDao.totalCount(userId,tagId);
+        Integer totalCount = articleDao.totalCount(userId, tagId);
         Integer totalPage = CommonUtils.calculateTotalPage(totalCount);
-        Integer offset = CommonUtils.calculatePageOffset(totalPage,page,size);
-        if (offset == null){
+        Integer offset = CommonUtils.calculatePageOffset(totalPage, page, size);
+        if (offset == null) {
             return null;
         }
         PaginationDto<ArticleDto> pagination = new PaginationDto<>();
-        List<ArticleDto> articleDtos = articleDao.getArticleList(userId,offset,size,tagId);
+        List<ArticleDto> articleDtos = articleDao.getArticleList(userId, offset, size, tagId);
         /*改为使用xml一次性查询出文章，和标签
         List<ArticleVO> ArticleVOs = userId == null?
                 ArticleMapper.getList(offset, size):ArticleMapper.getListByUserId(userId,offset,size);
@@ -69,12 +81,12 @@ public class ArticleService {
         return pagination;
     }
 
-    public ArticleDto findArticleById(Integer id,boolean isNotify) {
+    public ArticleDto findArticleById(Integer id, boolean isNotify) {
         ArticleVO articleVO = articleMapper.findArticleById(id);
         if (articleVO == null) {
             throw new CustomizeException(CustomizeErrorCode.ARTICLE_NOT_FOUND);
         }
-        if (isNotify){
+        if (isNotify) {
             userMapper.readNotification(articleVO.getId());
         }
         return buildArticleDto(articleVO);
@@ -86,7 +98,7 @@ public class ArticleService {
         //如果找到了修改的文章或者是about me文章
         if (!StringUtils.isEmpty(articleDto.getId()) ||
                 (articleDto.getType() == ArticleTypeEnum.ABOUT_ME.getCode() &&
-                        articleMapper.findArticleByType(ArticleTypeEnum.ABOUT_ME.getCode()) != null) ) {
+                        articleMapper.findArticleByType(ArticleTypeEnum.ABOUT_ME.getCode()) != null)) {
             ArticleVO dbArticleVO = articleMapper.findArticleById(articleDto.getId());
             dbArticleVO.setGmtModified(articleDto.getGmtCreate());
             dbArticleVO.setTitle(articleDto.getTitle());
@@ -98,7 +110,7 @@ public class ArticleService {
             id = dbArticleVO.getId();
         } else {
             ArticleVO ArticleVO = new ArticleVO();
-            BeanUtils.copyProperties(articleDto,ArticleVO);
+            BeanUtils.copyProperties(articleDto, ArticleVO);
             ArticleVO.setGmtCreate(System.currentTimeMillis());
             ArticleVO.setGmtModified(ArticleVO.getGmtCreate());
             ArticleVO.setType(articleDto.getType());
@@ -118,9 +130,9 @@ public class ArticleService {
     }
 
     /**
-     * @desc save tag method
      * @param tagDto
      * @return
+     * @desc save tag method
      */
     public int saveTag(TagDto tagDto) {
         TagVO tag = new TagVO();
@@ -133,23 +145,22 @@ public class ArticleService {
     }
 
     /**
-     * @desc getTags method
-     * @return
-     * @param type
      * @param used
+     * @return
+     * @desc getTags method
      */
     public List<TagDto> getTags(Integer used) {
         List<TagVO> tags;
-        if (used == 1){
+        if (used == 1) {
             tags = articleMapper.getUsedTags();
-        }else {
+        } else {
             tags = articleMapper.getTags();
         }
         List<TagDto> tagDtos = new ArrayList<>();
-        if (tags != null && tags.size() > 0 ){
-            for (TagVO tag : tags){
+        if (tags != null && tags.size() > 0) {
+            for (TagVO tag : tags) {
                 TagDto tagDto = new TagDto();
-                BeanUtils.copyProperties(tag,tagDto);
+                BeanUtils.copyProperties(tag, tagDto);
                 tagDtos.add(tagDto);
             }
         }
@@ -157,9 +168,9 @@ public class ArticleService {
     }
 
     /**
-     * @desc 根据标签名查找标签
      * @param tagName
      * @return
+     * @desc 根据标签名查找标签
      */
     public int findTagByName(String tagName) {
         tagName = tagName.toLowerCase();
@@ -168,9 +179,9 @@ public class ArticleService {
     }
 
     /**
-     * @desc 根据文章类型查找文章
      * @param code
      * @return
+     * @desc 根据文章类型查找文章
      */
     public ArticleDto findArticleByType(int code) {
         ArticleVO articleVO = articleMapper.findArticleByType(code);
@@ -181,11 +192,11 @@ public class ArticleService {
     }
 
     /**
-     * @desc 构建dto
      * @param articleVO
      * @return
+     * @desc 构建dto
      */
-    private ArticleDto buildArticleDto(ArticleVO articleVO){
+    private ArticleDto buildArticleDto(ArticleVO articleVO) {
         ArticleDto articleDto = new ArticleDto();
         UserVO user = userMapper.findById(articleVO.getCreator());
         List<TagDto> tagDtos = articleMapper.getArticleTags(articleVO.getId());
@@ -193,5 +204,41 @@ public class ArticleService {
         articleDto.setTagList(tagDtos);
         articleDto.setUser(user);
         return articleDto;
+    }
+
+    /**
+     * @param articleDto
+     * @param user
+     * @desc redis保存草稿
+     */
+    public void autoSaveDraft(ArticleDto articleDto, UserVO user) throws IllegalAccessException {
+        String draftKey = DRAFT_KEY + ":" + user.getId() + ":" + articleDto.getPublishToken();
+        Map<String, Object> draftMap = CommonUtils.objectValueToMap(articleDto);
+        redisUtils.hmSet(draftKey, draftMap);
+    }
+
+    /**
+     * @desc redis持久化草稿箱到mysql
+     * @param publishToken
+     * @param userId
+     * @throws IllegalAccessException
+     */
+    @Transactional
+    public void persistenceDraft(String publishToken, Integer userId) throws IllegalAccessException {
+        String draftKey = DRAFT_KEY + ":" + userId + ":" + publishToken;
+        Map<Object,Object> articleMap = redisUtils.hmGet(draftKey);
+        if (!CollectionUtils.isEmpty(articleMap)){
+            ArticleVO articleVO = JSON.parseObject(JSON.toJSONString(articleMap),ArticleVO.class);
+            articleVO.setGmtCreate(System.currentTimeMillis());
+            articleVO.setGmtModified(articleVO.getGmtCreate());
+            articleVO.setCreator(userId);
+            articleMapper.createArticle(articleVO);
+            if (articleVO.getId() != null){
+                //需要删除的hashmap的key
+                List<String> fieldNameList = CommonUtils.getObjectUsedFieldName(articleVO);
+                fieldNameList.add("publishToken");
+                redisUtils.hmDel(draftKey,fieldNameList.toArray());
+            }
+        }
     }
 }

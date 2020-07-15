@@ -162,4 +162,8 @@ public class UserService {
         pagination.setPagination(totalPage, page);
         return pagination;
     }
+
+    public Object totalDraftCount(Integer userId, int type) {
+        return userMapper.countDraft(userId,type);
+    }
 }

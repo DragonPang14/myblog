@@ -59,4 +59,7 @@ public interface UserMapper {
 
     @Select("select user_type from user where id = #{id} and del_flag = 0")
     int verifyUserType(Integer id);
+
+    @Select("select count(1) from article where creator = #{userId} and type = #{type} and del_flag = 0")
+    Integer countDraft(Integer userId, int type);
 }

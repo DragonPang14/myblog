@@ -9,6 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -182,6 +183,34 @@ public class RedisUtils {
 
     public Long bitCount(String key){
         return redisTemplate.execute((RedisCallback<Long>) con -> con.bitCount(key.getBytes()));
+    }
+
+    /**
+     * @desc hashmap set
+     * @param key
+     * @return
+     */
+    public boolean hmSet(String key, Map<String,Object> map){
+        try {
+            redisTemplate.opsForHash().putAll(key,map);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * @desc hashmap get
+     * @param key
+     * @return
+     */
+    public Map<Object,Object> hmGet(String key){
+        return redisTemplate.opsForHash().entries(key);
+    }
+
+    public void hmDel(String key,Object... item){
+        redisTemplate.opsForHash().delete(key,item);
     }
 
 }

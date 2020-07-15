@@ -1,5 +1,11 @@
 package com.pjl.blog.myblog.utils;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class CommonUtils {
 
     /**
@@ -33,5 +39,51 @@ public class CommonUtils {
             totalPage = 1;
         }
         return totalPage;
+    }
+
+    /**
+     * @desc 反射转换对象为map(只转换属性值不为空的)
+     * @param obj
+     * @return
+     */
+    public static Map<String,Object> objectValueToMap(Object obj) throws IllegalAccessException {
+        Map<String,Object> map = new HashMap<>();
+        Class<?> clazz = obj.getClass();
+        for (Field declaredField : clazz.getDeclaredFields()) {
+            declaredField.setAccessible(true);
+            Object value = declaredField.get(obj);
+            if (value != null){
+                map.put(declaredField.getName(),value);
+            }
+        }
+        return map;
+    }
+
+    /**
+     * @desc 提取对象的属性名称（只提取属性值不为空的）
+     * @param obj
+     * @return
+     * @throws IllegalAccessException
+     */
+    public static List<String> getObjectUsedFieldName(Object obj) throws IllegalAccessException {
+        List<String> fieldNameList = new ArrayList<>();
+        Class<?> clazz = obj.getClass();
+        //把非空字段属性名提取
+        notNullFieldList(obj, fieldNameList, clazz);
+        Class<?> supClazz = clazz.getSuperclass();
+        if (supClazz != null){
+            notNullFieldList(obj, fieldNameList, supClazz);
+        }
+        return fieldNameList;
+    }
+
+    private static void notNullFieldList(Object obj, List<String> fieldNameList, Class<?> clazz) throws IllegalAccessException {
+        for (Field declaredField : clazz.getDeclaredFields()) {
+            declaredField.setAccessible(true);
+            Object value = declaredField.get(obj);
+            if (value != null){
+                fieldNameList.add(declaredField.getName());
+            }
+        }
     }
 }
