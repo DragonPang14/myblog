@@ -61,6 +61,10 @@ function userLogin() {
     })
 }
 
+function draftBox(){
+    window.location.href = "/draftBox";
+}
+
 
 $("#toggle-sidebar").click(function () {
     if (getCookie("pjl-blog-token") != null){

@@ -16,4 +16,8 @@ public interface ArticleDao {
     List<ArticleDto> getArticleList(Integer userId, Integer offset, Integer size, Integer tagId);
 
     Integer totalCount(Integer userId, Integer tagId);
+
+    List<ArticleDto> getDraftList(Integer userId, Integer offset, Integer size);
+
+    Integer totalCountDraft(Integer userId);
 }

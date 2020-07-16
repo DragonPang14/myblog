@@ -55,4 +55,7 @@ public interface ArticleMapper {
 
     @Select("select distinct t.* from tag t inner join article_tags at on t.id = at.tag_id where at.del_flag = 0 and t.del_flag = 0")
     List<TagVO> getUsedTags();
+
+    @Update("<script>update article set del_flag = 1 where creator = #{userId} and type = 3 <if test='draftId != null'>and id = #{draftId}</if></script>")
+    void removeDraft(Integer draftId, Integer userId);
 }

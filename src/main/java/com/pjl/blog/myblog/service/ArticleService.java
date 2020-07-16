@@ -241,4 +241,33 @@ public class ArticleService {
             }
         }
     }
+
+    /**
+     * @desc 获取草稿
+     * @param userId
+     * @param page
+     * @return
+     */
+    public PaginationDto<ArticleDto> getDraftByUserId(Integer userId, Integer page) {
+        Integer totalCount = articleDao.totalCountDraft(userId);
+        Integer totalPage = CommonUtils.calculateTotalPage(totalCount);
+        Integer offset = CommonUtils.calculatePageOffset(totalPage, page, 20);
+        if (offset == null) {
+            return null;
+        }
+        PaginationDto<ArticleDto> pagination = new PaginationDto<>();
+        List<ArticleDto> draftDtos = articleDao.getDraftList(userId,offset, 20);
+        pagination.setPageList(draftDtos);
+        pagination.setPagination(totalPage, page);
+        return pagination;
+    }
+
+    /**
+     * @desc 移除草稿
+     * @param id
+     * @param userId
+     */
+    public void removeDraft(Integer draftId, Integer userId) {
+        articleMapper.removeDraft(draftId,userId);
+    }
 }

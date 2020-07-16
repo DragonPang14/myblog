@@ -5,6 +5,7 @@ import com.pjl.blog.myblog.enums.CustomizeStatusEnum;
 import com.pjl.blog.myblog.exception.CustomizeErrorCode;
 import com.pjl.blog.myblog.exception.CustomizeException;
 import com.pjl.blog.myblog.model.UserVO;
+import com.pjl.blog.myblog.service.ArticleService;
 import com.pjl.blog.myblog.service.UserService;
 import com.pjl.blog.myblog.utils.FastDfsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,16 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ArticleService articleService;
 
     @Autowired
     private FastDfsUtils fastDfsUtils;
@@ -136,6 +141,32 @@ public class UserController {
             throw new CustomizeException(CustomizeErrorCode.USER_NOT_FOUND);
         }
         return ResultDto.okOf(userService.totalDraftCount(user.getId(),3));
+    }
+
+    @GetMapping("/draftBox")
+    public String draftBox(){
+        return "draftbox";
+    }
+
+    @GetMapping("/getDraftBox")
+    public @ResponseBody ResultDto<PaginationDto> getDraftBox(@CookieValue(value = "pjl-blog-token")String token,
+                                                           @RequestParam(value = "page", defaultValue = "1") Integer page){
+        ResultDto<PaginationDto> resultDto;
+        UserVO user = userService.findByToken(token);
+        if (user == null){
+            resultDto = new ResultDto(CustomizeStatusEnum.UNLOGIN_CODE);
+            return resultDto;
+        }
+        try {
+            PaginationDto<ArticleDto> paginationDto = articleService.getDraftByUserId(user.getId(),page);
+            resultDto = new ResultDto<>(CustomizeStatusEnum.SUCCESS_CODE);
+            resultDto.setObj(paginationDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultDto = new ResultDto<>(CustomizeStatusEnum.CODE_ERROR);
+            resultDto.setMsg(e.getMessage());
+        }
+        return resultDto;
     }
 
 }

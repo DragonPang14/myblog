@@ -2,7 +2,7 @@ var page = 1;
 
 $(function () {
 
-    getArticleList(page,getQueryString("tag"));
+    getArticleList(getQueryString("tag"));
 
     getTags();
 
@@ -34,7 +34,7 @@ $(window).scroll(function () {
 
 
 
-function getArticleList(page,tag) {
+function getArticleList(tag) {
     $("#spinner").css("display","block");
     var url = "/getArticleList?page="+page;
     if (tag != null){
@@ -92,7 +92,7 @@ $(".top").click(function(){
 
 $("#btn-page").click(function () {
     page++;
-    getArticleList(page,getQueryString("tag"));
+    getArticleList(getQueryString("tag"));
 })
 
 function getTags() {

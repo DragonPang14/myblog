@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>草稿箱</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+<body class="post-body">
+<div th:insert="~{fragment/header :: header}"></div>
+<div class="intro-landing">
+    <div class="about-img"></div>
+    <div class="site-intro-meta">
+        <div class="site-title">
+            <h1>草稿箱</h1>
+        </div>
+        <div class="post-intros">
+            <div class="post-intro-meta">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="wrapper">
+    <div class="blog-container">
+        <main class="main">
+        <button id="removeAllDraft" class="btn btn-light">舍弃所有草稿</button>
+
+        </main>
+    </div>
+    <a class="load-more gray" href="javascript:;" id="btn-page">LOAD MORE</a>
+    <div class="d-flex justify-content-center pt-4 pb-4"  style="display: none">
+        <div class="spinner-border" id="spinner" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+</div>
+</body>
+<script src="/js/jquery-3.3.1.min.js" type="application/javascript"></script>
+<script src="/pagejs/draftbox.js" type="application/javascript"></script>
+</html>
