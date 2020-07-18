@@ -55,7 +55,7 @@
         </div>
         <div class="sep20"></div>
         <div id="md-content">
-            <textarea style="display: none;" id="content" th:text="${articleDto !=null?(articleDto.descriptionStr == null?'':articleDto.descriptionStr == null)  + articleDto.content:''}"></textarea>
+            <textarea style="display: none;" id="content" th:text="${articleDto !=null?(articleDto.descriptionStr == null?'':articleDto.descriptionStr)  + articleDto.content:''}"></textarea>
         </div>
         <input type="hidden" class="form-control" name="id" id="article-id"
                th:value="${articleDto != null?articleDto.id:''}">

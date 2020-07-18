@@ -49,6 +49,13 @@ public class CommonUtils {
     public static Map<String,Object> objectValueToMap(Object obj) throws IllegalAccessException {
         Map<String,Object> map = new HashMap<>();
         Class<?> clazz = obj.getClass();
+        notNullValueMap(obj, map, clazz);
+        Class<?> supClazz = clazz.getSuperclass();
+        notNullValueMap(obj, map, supClazz);
+        return map;
+    }
+
+    private static void notNullValueMap(Object obj, Map<String, Object> map, Class<?> clazz) throws IllegalAccessException {
         for (Field declaredField : clazz.getDeclaredFields()) {
             declaredField.setAccessible(true);
             Object value = declaredField.get(obj);
@@ -56,7 +63,6 @@ public class CommonUtils {
                 map.put(declaredField.getName(),value);
             }
         }
-        return map;
     }
 
     /**

@@ -93,19 +93,18 @@ public class ArticleService {
     }
 
 
-    public void createOrUpdate(ArticleDto articleDto, List<Integer> tagIdList) {
+    public void createOrUpdate(ArticleDto articleDto, List<Integer> tagIdList) throws IllegalAccessException {
         Integer id;
+        int isSuccess;
+        String draftKey = DRAFT_KEY + ":" + articleDto.getPublishToken();
         //如果找到了修改的文章或者是about me文章
         if (!StringUtils.isEmpty(articleDto.getId()) ||
                 (articleDto.getType() == ArticleTypeEnum.ABOUT_ME.getCode() &&
                         articleMapper.findArticleByType(ArticleTypeEnum.ABOUT_ME.getCode()) != null)) {
             ArticleVO dbArticleVO = articleMapper.findArticleById(articleDto.getId());
-            dbArticleVO.setGmtModified(articleDto.getGmtCreate());
-            dbArticleVO.setTitle(articleDto.getTitle());
-            dbArticleVO.setDescription(articleDto.getDescription());
-            dbArticleVO.setDescriptionStr(articleDto.getDescriptionStr());
-            dbArticleVO.setContent(articleDto.getContent());
-            articleMapper.updateArticle(dbArticleVO);
+            BeanUtils.copyProperties(articleDto,dbArticleVO);
+            dbArticleVO.setGmtModified(System.currentTimeMillis());
+            isSuccess = articleMapper.updateArticle(dbArticleVO);
             articleMapper.deleteArticleTags(dbArticleVO.getId());
             id = dbArticleVO.getId();
         } else {
@@ -114,8 +113,13 @@ public class ArticleService {
             ArticleVO.setGmtCreate(System.currentTimeMillis());
             ArticleVO.setGmtModified(ArticleVO.getGmtCreate());
             ArticleVO.setType(articleDto.getType());
-            articleMapper.createArticle(ArticleVO);
+            isSuccess = articleMapper.createArticle(ArticleVO);
             id = ArticleVO.getId();
+        }
+        if (isSuccess > 0){
+            //需要删除的hashmap的key
+            List<String> fieldNameList = CommonUtils.getObjectUsedFieldName(articleDto);
+            redisUtils.hmDel(draftKey,fieldNameList.toArray());
         }
         List<ArticleTagsVO> articleTagsList = new ArrayList<>();
         for (Integer tagId : tagIdList) {
@@ -208,11 +212,10 @@ public class ArticleService {
 
     /**
      * @param articleDto
-     * @param user
      * @desc redis保存草稿
      */
-    public void autoSaveDraft(ArticleDto articleDto, UserVO user) throws IllegalAccessException {
-        String draftKey = DRAFT_KEY + ":" + user.getId() + ":" + articleDto.getPublishToken();
+    public void autoSaveDraft(ArticleDto articleDto) throws IllegalAccessException {
+        String draftKey = DRAFT_KEY + ":" + articleDto.getPublishToken();
         Map<String, Object> draftMap = CommonUtils.objectValueToMap(articleDto);
         redisUtils.hmSet(draftKey, draftMap);
     }
@@ -225,15 +228,21 @@ public class ArticleService {
      */
     @Transactional
     public void persistenceDraft(String publishToken, Integer userId) throws IllegalAccessException {
-        String draftKey = DRAFT_KEY + ":" + userId + ":" + publishToken;
+        String draftKey = DRAFT_KEY + ":" + publishToken;
         Map<Object,Object> articleMap = redisUtils.hmGet(draftKey);
+        int isSuccess;
         if (!CollectionUtils.isEmpty(articleMap)){
             ArticleVO articleVO = JSON.parseObject(JSON.toJSONString(articleMap),ArticleVO.class);
-            articleVO.setGmtCreate(System.currentTimeMillis());
-            articleVO.setGmtModified(articleVO.getGmtCreate());
             articleVO.setCreator(userId);
-            articleMapper.createArticle(articleVO);
             if (articleVO.getId() != null){
+                articleVO.setGmtModified(System.currentTimeMillis());
+                isSuccess = articleMapper.updateArticle(articleVO);
+            }else {
+                articleVO.setGmtCreate(System.currentTimeMillis());
+                articleVO.setGmtModified(articleVO.getGmtCreate());
+                isSuccess = articleMapper.createArticle(articleVO);
+            }
+            if (isSuccess > 0){
                 //需要删除的hashmap的key
                 List<String> fieldNameList = CommonUtils.getObjectUsedFieldName(articleVO);
                 fieldNameList.add("publishToken");
@@ -264,7 +273,7 @@ public class ArticleService {
 
     /**
      * @desc 移除草稿
-     * @param id
+     * @param draftId
      * @param userId
      */
     public void removeDraft(Integer draftId, Integer userId) {

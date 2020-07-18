@@ -70,6 +70,7 @@ public class PublishController {
         if (articleDto != null){
             model.addAttribute("articleDto",articleDto);
         }
+        model.addAttribute("publishToken", UUID.randomUUID().toString());
         return "publish";
     }
 
@@ -185,12 +186,11 @@ public class PublishController {
         if (StringUtils.isEmpty(articleDto.getTitle()) && StringUtils.isEmpty(articleDto.getContent())){
             return new ResultDto(CustomizeStatusEnum.NOTHING_TO_SAVE);
         }
-        if (token == null) {
+        if (token == null || userService.findByToken(token) == null) {
             return new ResultDto(CustomizeStatusEnum.UNLOGIN_CODE);
         }
-        UserVO user = userService.findByToken(token);
         try {
-            articleService.autoSaveDraft(articleDto,user);
+            articleService.autoSaveDraft(articleDto);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
             return new ResultDto(CustomizeStatusEnum.CODE_ERROR);

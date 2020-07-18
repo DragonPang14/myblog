@@ -1,5 +1,6 @@
 let contentTime;
 let titleTime;
+let isDraft = true;
 $(function () {
     getTags();
 
@@ -68,20 +69,21 @@ window.onbeforeunload=function(ev){
 function autoSaveDraft() {
     console.info("ajax");
     $("#saved").css("display","none");
-    $("#saveing").css("display","block");
+    $("#saveing").css("display","inline");
     let title = $("#title").val();
     let content = $("#content").val();
+    let articleId = $("#article-id").val();
     let publishToken = $("#publish-token").val();
     $.ajax({
         url:"/autoSaveDraft",
         type:"post",
         contentType: "application/json",
-        data:JSON.stringify({"title":title,"content":content,"type":3,"publishToken":publishToken}),
+        data:JSON.stringify({"id":articleId,"title":title,"content":content,"type":3,"publishToken":publishToken}),
         dataType:"json",
         success:function (data) {
             if (data.code == 100){
                 $("#saveing").css("display","none");
-                $("#saved").css("display","block");
+                $("#saved").css("display","inline");
             }
             console.info("success");
         },
@@ -92,13 +94,15 @@ function autoSaveDraft() {
 }
 
 function persistenceDraft() {
-    let publishToken = $("#publish-token").val();
-    $.ajax({
-        url:"/persistenceDraft",
-        type:"put",
-        dataType:"json",
-        data:{publishToken:publishToken}
-    });
+    if (isDraft){
+        let publishToken = $("#publish-token").val();
+        $.ajax({
+            url:"/persistenceDraft",
+            type:"put",
+            dataType:"json",
+            data:{publishToken:publishToken}
+        });
+    }
 
 }
 
@@ -156,6 +160,7 @@ function publishWithMd() {
     let title = $("#title").val();
     let description = $("textarea[name='md-content-html-code']").val();
     let content = $("#content").val();
+    let publishToken = $("#publish-token").val();
     let tag = '';
     let type = 1;
     if($("#about-me-check").is(":checked")){
@@ -182,11 +187,10 @@ function publishWithMd() {
         dataType: "json",
         type: "post",
         contentType: "application/json",
-        data: JSON.stringify({"id":articleId,"title": title,"description":description,"content": content,"tag":tag,"type":type}),
+        data: JSON.stringify({"id":articleId,"title": title,"description":description,"content": content,"tag":tag,"type":type,"publishToken":publishToken}),
         success: function (data) {
             if (data.code == 100) {
-                storage.removeItem("pjl-blog-title");
-                storage.removeItem("pjl-blog-content");
+                isDraft = false;
                 window.location.href = "/";
             } else {
                 alert(data.msg);

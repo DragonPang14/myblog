@@ -14,8 +14,7 @@ public interface ArticleMapper {
 
     @Insert("insert into article (title,description,description_str,content,gmt_create,gmt_modified,creator,type) " +
             "values (#{title},#{description},#{descriptionStr},#{content},#{gmtCreate},#{gmtModified},#{creator},#{type})")
-    @Options(useGeneratedKeys = true,keyProperty = "id",keyColumn = "id")
-    Integer createArticle(ArticleVO articleVO);
+    int createArticle(ArticleVO articleVO);
 
     @Select("select count(1) from article where creator = #{userId}")
     Integer userArticleCount(@Param(value = "userId") Integer userId);
@@ -23,9 +22,8 @@ public interface ArticleMapper {
     @Select("select * from article where id = #{id}")
     ArticleVO findArticleById(@Param(value = "id") Integer id);
 
-    @Update("update article set gmt_modified = #{gmtModified},title = #{title},description = #{description},description_str = #{descriptionStr},content = #{content} where id = #{id}")
-    @Options(useGeneratedKeys = true,keyProperty = "id",keyColumn = "id")
-    Integer updateArticle(ArticleVO dbArticle);
+    @Update("update article set gmt_modified = #{gmtModified},title = #{title},description = #{description},description_str = #{descriptionStr},content = #{content},type = #{type} where id = #{id}")
+    int updateArticle(ArticleVO dbArticle);
 
     @Update("update article set comment_count = comment_count + #{i} where id = #{id}")
     void incComment(@Param(value = "id") Integer parentId, @Param(value = "i") long i);
