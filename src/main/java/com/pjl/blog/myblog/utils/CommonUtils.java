@@ -55,6 +55,13 @@ public class CommonUtils {
         return map;
     }
 
+    /**
+     * @desc 转换对象为map
+     * @param obj
+     * @param map
+     * @param clazz
+     * @throws IllegalAccessException
+     */
     private static void notNullValueMap(Object obj, Map<String, Object> map, Class<?> clazz) throws IllegalAccessException {
         for (Field declaredField : clazz.getDeclaredFields()) {
             declaredField.setAccessible(true);
@@ -83,6 +90,13 @@ public class CommonUtils {
         return fieldNameList;
     }
 
+    /**
+     * @desc 提取对象属性名称
+     * @param obj
+     * @param fieldNameList
+     * @param clazz
+     * @throws IllegalAccessException
+     */
     private static void notNullFieldList(Object obj, List<String> fieldNameList, Class<?> clazz) throws IllegalAccessException {
         for (Field declaredField : clazz.getDeclaredFields()) {
             declaredField.setAccessible(true);

@@ -72,6 +72,7 @@ function getArticleList(tag) {
                     listHtml += '</article>';
                 });
                 $(".main").append(listHtml);
+                $(".load-more").css("display","block");
                 $(".spinner-border").css("display","none");
             }else if(data.obj == null){
                 $(".spinner-border").css("display","none");

@@ -1,6 +1,5 @@
-let contentTime;
-let titleTime;
-let isDraft = true;
+let time;
+let isDraft;
 $(function () {
     getTags();
 
@@ -44,16 +43,16 @@ $(function () {
 
 
 $("#title").keyup(function () {
-    clearTimeout(titleTime);
-    titleTime = setTimeout(function () {
+    clearTimeout(time);  //每次编辑都清除定时
+    time = setTimeout(function () {
         autoSaveDraft();
-    },3000);
+    },3000);  //3秒钟后执行方法
 });
 
-//定时存储localStorage
+//定时存储redis
 function inputTimer() {
-    clearTimeout(contentTime);
-    contentTime = setTimeout(function () {
+    clearTimeout(time);
+    time = setTimeout(function () {
         this.autoSaveDraft();
     },3000);
 }
@@ -84,8 +83,8 @@ function autoSaveDraft() {
             if (data.code == 100){
                 $("#saveing").css("display","none");
                 $("#saved").css("display","inline");
+                isDraft = true;
             }
-            console.info("success");
         },
         error:function () {
             console.info("error");

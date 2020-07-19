@@ -33,7 +33,7 @@ function getDraftBox() {
                 });
                 $(".main").append(listHtml);
                 $(".spinner-border").css("display","none");
-
+                $(".load-more").css("display","block");
             }else if(data.obj == null){
                 $(".spinner-border").css("display","none");
                 alert("没有更多了！");
