@@ -10,27 +10,27 @@ $(function () {
         imageUpload: true,
         imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
         imageUploadURL: "/uploadImage",
-        saveHTMLToTextarea:true,
+        saveHTMLToTextarea: true,
         emoji: true,
-        toolbarIconTexts:{
-            addSummary:"摘要"
+        toolbarIconTexts: {
+            addSummary: "摘要"
         },
-        toolbarHandlers:{
-            addSummary : function() {
+        toolbarHandlers: {
+            addSummary: function () {
                 editor.insertValue("<!--summary-->");
             }
         },
-        lang:{
-            toolbar:{
-                addSummary:"Alt+/ 可以添加摘要分隔符"
+        lang: {
+            toolbar: {
+                addSummary: "Alt+/ 可以添加摘要分隔符"
             }
         },
-        onchange:function(){
+        onchange: function () {
             inputTimer();
         },
-        onload : function() {
+        onload: function () {
             var keyMap = {
-                "Alt-/": function() {
+                "Alt-/": function () {
                     editor.insertValue("<!--summary-->");
                 }
             };
@@ -46,7 +46,7 @@ $("#title").keyup(function () {
     clearTimeout(time);  //每次编辑都清除定时
     time = setTimeout(function () {
         autoSaveDraft();
-    },3000);  //3秒钟后执行方法
+    }, 3000);  //3秒钟后执行方法
 });
 
 //定时存储redis
@@ -54,80 +54,84 @@ function inputTimer() {
     clearTimeout(time);
     time = setTimeout(function () {
         this.autoSaveDraft();
-    },3000);
+    }, 3000);
 }
 
 
-window.onbeforeunload=function(ev){
-    console.info($("#content").val());
+window.onbeforeunload = function (ev) {
+    if (isDraft) {
     this.persistenceDraft();
-    console.info("after");
+        return "dsa";
+    }
 }
 
 
 function autoSaveDraft() {
     console.info("ajax");
-    $("#saved").css("display","none");
-    $("#saveing").css("display","inline");
+    $("#saved").css("display", "none");
+    $("#saveing").css("display", "inline");
     let title = $("#title").val();
     let content = $("#content").val();
     let articleId = $("#article-id").val();
     let publishToken = $("#publish-token").val();
     $.ajax({
-        url:"/autoSaveDraft",
-        type:"post",
+        url: "/autoSaveDraft",
+        type: "post",
         contentType: "application/json",
-        data:JSON.stringify({"id":articleId,"title":title,"content":content,"type":3,"publishToken":publishToken}),
-        dataType:"json",
-        success:function (data) {
-            if (data.code == 100){
-                $("#saveing").css("display","none");
-                $("#saved").css("display","inline");
+        data: JSON.stringify({
+            "id": articleId,
+            "title": title,
+            "content": content,
+            "type": 3,
+            "publishToken": publishToken
+        }),
+        dataType: "json",
+        success: function (data) {
+            if (data.code == 100) {
+                $("#saveing").css("display", "none");
+                $("#saved").css("display", "inline");
                 isDraft = true;
             }
         },
-        error:function () {
+        error: function () {
             console.info("error");
         }
     })
 }
 
 function persistenceDraft() {
-    if (isDraft){
-        let publishToken = $("#publish-token").val();
-        $.ajax({
-            url:"/persistenceDraft",
-            type:"put",
-            dataType:"json",
-            data:{publishToken:publishToken}
-        });
-    }
-
+    let publishToken = $("#publish-token").val();
+    $.ajax({
+        url: "/persistenceDraft",
+        type: "put",
+        dataType: "json",
+        data: {publishToken: publishToken}
+    });
 }
 
 function saveTag() {
     var flag = true;
     $("#tag-modal .form-control").each(function () {
-        if (!verifyInput($(this).val())){
-            $(this).addClass("is-invalid").attr("placeholder","必填！");
+        if (!verifyInput($(this).val())) {
+            $(this).addClass("is-invalid").attr("placeholder", "必填！");
             flag = false;
         }
     });
     console.info(flag);
     var name = $("#tagName").val();
     var remarks = $("#remarks").val();
-    if (flag){
+    if (flag) {
         $.ajax({
-            url:"/saveTag",
-            type:"post",
+            url: "/saveTag",
+            type: "post",
             contentType: "application/json",
             dataType: "json",
-            data: JSON.stringify({"tagName":name,"remarks":remarks}),
-            success:function (data) {
-                if (data.code == 100){
+            data: JSON.stringify({"tagName": name, "remarks": remarks}),
+            success: function (data) {
+                if (data.code == 100) {
                     alert("创建成功，请重新进入页面使用新标签");
                     $("#tag-modal").modal('hide');
-                }else {
+                } else {
                     alert(data.msg);
                 }
             }
@@ -138,14 +142,14 @@ function saveTag() {
 function getTags() {
     $("#tag-content").empty();
     $.ajax({
-        url:"/getTags?used=0",
-        type:"get",
+        url: "/getTags?used=0",
+        type: "get",
         dataType: "json",
-        success:function (data) {
-            if (data.code == 100){
+        success: function (data) {
+            if (data.code == 100) {
                 var tagHtml = '';
-                $.each(data.obj,function (index,tag) {
-                    tagHtml += '<a class="unselect-tag m-1" href="javascript:;" id="'+tag.id+'">'+tag.tagName+'</a>\n'
+                $.each(data.obj, function (index, tag) {
+                    tagHtml += '<a class="unselect-tag m-1" href="javascript:;" id="' + tag.id + '">' + tag.tagName + '</a>\n'
                 })
                 $("#tag-content").append(tagHtml);
             }
@@ -162,7 +166,7 @@ function publishWithMd() {
     let publishToken = $("#publish-token").val();
     let tag = '';
     let type = 1;
-    if($("#about-me-check").is(":checked")){
+    if ($("#about-me-check").is(":checked")) {
         type = 2;
     }
     $(".selected-tag").each(function () {
@@ -177,7 +181,7 @@ function publishWithMd() {
         alert("请输入描述！");
         return;
     }
-    if (tag == '' && type == 1){
+    if (tag == '' && type == 1) {
         alert("请选择标签！");
         return;
     }
@@ -186,7 +190,15 @@ function publishWithMd() {
         dataType: "json",
         type: "post",
         contentType: "application/json",
-        data: JSON.stringify({"id":articleId,"title": title,"description":description,"content": content,"tag":tag,"type":type,"publishToken":publishToken}),
+        data: JSON.stringify({
+            "id": articleId,
+            "title": title,
+            "description": description,
+            "content": content,
+            "tag": tag,
+            "type": type,
+            "publishToken": publishToken
+        }),
         success: function (data) {
             if (data.code == 100) {
                 isDraft = false;
@@ -199,9 +211,9 @@ function publishWithMd() {
 }
 
 function verifyInput(value) {
-    if(value == null||value == ""){
+    if (value == null || value == "") {
         return false;
-    }else {
+    } else {
         return true;
     }
 }
@@ -223,7 +235,7 @@ var bind_search_event = function () {
     })
 }
 
-var template_tag = function (tag_text,tag_id) {
+var template_tag = function (tag_text, tag_id) {
     var tag = `
         <a class="btn btn-light btn-sm selected-tag mr-2" data-tag-id="${tag_id}" href="javascript:;">
             ${tag_text}
@@ -260,12 +272,12 @@ var show_tag = function (id) {
     })
 }
 
-var bind_tag_click_event = function() {
+var bind_tag_click_event = function () {
     $('#tag-content').click(function (e) {
-        if (e.target.classList.contains('unselect-tag')){
+        if (e.target.classList.contains('unselect-tag')) {
             var tag_text = e.target.text
             var tag_id = e.target.id
-            var tag = template_tag(tag_text,tag_id)
+            var tag = template_tag(tag_text, tag_id)
             var add_tag_btn = document.querySelector('#dropdown-button')
             add_tag_btn.insertAdjacentHTML('beforeBegin', tag)
             bind_tag_close_event()
@@ -275,7 +287,7 @@ var bind_tag_click_event = function() {
     })
 }
 
-var bind_tag_close_event = function(){
+var bind_tag_close_event = function () {
     $('.ml-2').click(function (e) {
         var p = e.target.parentNode
         --p.parentNode.dataset.tagNums

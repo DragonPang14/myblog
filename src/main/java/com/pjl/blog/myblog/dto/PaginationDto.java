@@ -14,6 +14,7 @@ public class PaginationDto<T> {
     private boolean showLast;
     private Integer currentPage;
     private Integer totalPage;
+    private Integer offset;
     private List<Integer> pages = new ArrayList<>();
 
     public void setPagination(Integer totalPage, Integer page) {

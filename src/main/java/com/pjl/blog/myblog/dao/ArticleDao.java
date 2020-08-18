@@ -20,4 +20,6 @@ public interface ArticleDao {
     List<ArticleDto> getDraftList(Integer userId, Integer offset, Integer size);
 
     Integer totalCountDraft(Integer userId);
+
+    List<ArticleDto> getTimeLine();
 }

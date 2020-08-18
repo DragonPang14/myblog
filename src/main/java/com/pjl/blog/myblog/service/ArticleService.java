@@ -49,35 +49,9 @@ public class ArticleService {
     public PaginationDto<ArticleDto> getList(Integer userId, Integer page, Integer size, Integer tagId) {
 
         Integer totalCount = articleDao.totalCount(userId, tagId);
-        Integer totalPage = CommonUtils.calculateTotalPage(totalCount);
-        Integer offset = CommonUtils.calculatePageOffset(totalPage, page, size);
-        if (offset == null) {
-            return null;
-        }
-        PaginationDto<ArticleDto> pagination = new PaginationDto<>();
-        List<ArticleDto> articleDtos = articleDao.getArticleList(userId, offset, size, tagId);
-        /*改为使用xml一次性查询出文章，和标签
-        List<ArticleVO> ArticleVOs = userId == null?
-                ArticleMapper.getList(offset, size):ArticleMapper.getListByUserId(userId,offset,size);
-        List<articleDto> articleDtos = new ArrayList<>();
-        User loginUser = null;
-        if (userId != null){
-            loginUser = userMapper.findById(userId);
-        }
-        for (ArticleVO ArticleVO : ArticleVOs) {
-            articleDto articleDto = new articleDto();
-            BeanUtils.copyProperties(ArticleVO, articleDto);
-            if (loginUser != null){
-                articleDto.setUser(loginUser);
-            }else {
-                User user = userMapper.findById(ArticleVO.getCreator());
-                articleDto.setUser(user);
-            }
-            articleDtos.add(articleDto);
-        }
-        */
+        PaginationDto<ArticleDto> pagination = CommonUtils.buildPage(ArticleDto.class,totalCount,page,size);
+        List<ArticleDto> articleDtos = articleDao.getArticleList(userId, pagination.getOffset(), size, tagId);
         pagination.setPageList(articleDtos);
-        pagination.setPagination(totalPage, page);
         return pagination;
     }
 
@@ -259,15 +233,9 @@ public class ArticleService {
      */
     public PaginationDto<ArticleDto> getDraftByUserId(Integer userId, Integer page) {
         Integer totalCount = articleDao.totalCountDraft(userId);
-        Integer totalPage = CommonUtils.calculateTotalPage(totalCount);
-        Integer offset = CommonUtils.calculatePageOffset(totalPage, page, 20);
-        if (offset == null) {
-            return null;
-        }
-        PaginationDto<ArticleDto> pagination = new PaginationDto<>();
-        List<ArticleDto> draftDtos = articleDao.getDraftList(userId,offset, 20);
+        PaginationDto<ArticleDto> pagination = CommonUtils.buildPage(ArticleDto.class,totalCount,page,20);
+        List<ArticleDto> draftDtos = articleDao.getDraftList(userId,pagination.getOffset(),20);
         pagination.setPageList(draftDtos);
-        pagination.setPagination(totalPage, page);
         return pagination;
     }
 
@@ -279,4 +247,17 @@ public class ArticleService {
     public void removeDraft(Integer draftId, Integer userId) {
         articleMapper.removeDraft(draftId,userId);
     }
+
+    /**
+     * @desc 获取时间线
+     * @param page
+     * @return
+     */
+    public List<ArticleDto> getTimeLine() {
+        List<ArticleDto> timeLineDtos = articleDao.getTimeLine();
+        return timeLineDtos;
+    }
+
+
+
 }

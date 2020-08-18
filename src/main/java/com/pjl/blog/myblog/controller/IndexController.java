@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @Controller
 public class IndexController {
 
@@ -33,6 +35,21 @@ public class IndexController {
             PaginationDto<ArticleDto> paginationDto = articleService.getList(null,page,size,tagId);
             resultDto = new ResultDto<>(CustomizeStatusEnum.SUCCESS_CODE);
             resultDto.setObj(paginationDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultDto = new ResultDto<>(CustomizeStatusEnum.CODE_ERROR);
+        }
+        return resultDto;
+    }
+
+    @GetMapping("/getTimeLine")
+    public @ResponseBody ResultDto<List<ArticleDto>> getTimeLine(){
+
+        ResultDto<List<ArticleDto>> resultDto;
+        try {
+            List<ArticleDto> timeLines = articleService.getTimeLine();
+            resultDto = new ResultDto<>(CustomizeStatusEnum.SUCCESS_CODE);
+            resultDto.setObj(timeLines);
         } catch (Exception e) {
             e.printStackTrace();
             resultDto = new ResultDto<>(CustomizeStatusEnum.CODE_ERROR);

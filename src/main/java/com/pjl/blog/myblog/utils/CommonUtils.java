@@ -1,5 +1,7 @@
 package com.pjl.blog.myblog.utils;
 
+import com.pjl.blog.myblog.dto.PaginationDto;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +44,26 @@ public class CommonUtils {
     }
 
     /**
+     * @desc 构建分页实体（总页数、页数和偏移量）
+     * @param totalCount
+     * @param page
+     * @param size
+     * @return
+     */
+    public static <T> PaginationDto buildPage(T t, Integer totalCount, Integer page, Integer size){
+        Integer totalPage = CommonUtils.calculateTotalPage(totalCount);
+        Integer offset = CommonUtils.calculatePageOffset(totalPage, page,size);
+        if (offset == null) {
+            return null;
+        }
+        PaginationDto<T> pagination = new PaginationDto<T>();
+        pagination.setOffset(offset);
+        pagination.setPagination(totalPage,page);
+        return pagination;
+    }
+
+
+    /**
      * @desc 反射转换对象为map(只转换属性值不为空的)
      * @param obj
      * @return
@@ -49,20 +71,6 @@ public class CommonUtils {
     public static Map<String,Object> objectValueToMap(Object obj) throws IllegalAccessException {
         Map<String,Object> map = new HashMap<>();
         Class<?> clazz = obj.getClass();
-        notNullValueMap(obj, map, clazz);
-        Class<?> supClazz = clazz.getSuperclass();
-        notNullValueMap(obj, map, supClazz);
-        return map;
-    }
-
-    /**
-     * @desc 转换对象为map
-     * @param obj
-     * @param map
-     * @param clazz
-     * @throws IllegalAccessException
-     */
-    private static void notNullValueMap(Object obj, Map<String, Object> map, Class<?> clazz) throws IllegalAccessException {
         for (Field declaredField : clazz.getDeclaredFields()) {
             declaredField.setAccessible(true);
             Object value = declaredField.get(obj);
@@ -70,7 +78,17 @@ public class CommonUtils {
                 map.put(declaredField.getName(),value);
             }
         }
+        Class<?> supClazz = clazz.getSuperclass();
+        for (Field declaredField : clazz.getDeclaredFields()) {
+            declaredField.setAccessible(true);
+            Object value = declaredField.get(obj);
+            if (value != null){
+                map.put(declaredField.getName(),value);
+            }
+        }
+        return map;
     }
+
 
     /**
      * @desc 提取对象的属性名称（只提取属性值不为空的）
@@ -82,22 +100,6 @@ public class CommonUtils {
         List<String> fieldNameList = new ArrayList<>();
         Class<?> clazz = obj.getClass();
         //把非空字段属性名提取
-        notNullFieldList(obj, fieldNameList, clazz);
-        Class<?> supClazz = clazz.getSuperclass();
-        if (supClazz != null){
-            notNullFieldList(obj, fieldNameList, supClazz);
-        }
-        return fieldNameList;
-    }
-
-    /**
-     * @desc 提取对象属性名称
-     * @param obj
-     * @param fieldNameList
-     * @param clazz
-     * @throws IllegalAccessException
-     */
-    private static void notNullFieldList(Object obj, List<String> fieldNameList, Class<?> clazz) throws IllegalAccessException {
         for (Field declaredField : clazz.getDeclaredFields()) {
             declaredField.setAccessible(true);
             Object value = declaredField.get(obj);
@@ -105,5 +107,17 @@ public class CommonUtils {
                 fieldNameList.add(declaredField.getName());
             }
         }
+        Class<?> supClazz = clazz.getSuperclass();
+        if (supClazz != null){
+            for (Field declaredField : clazz.getDeclaredFields()) {
+                declaredField.setAccessible(true);
+                Object value = declaredField.get(obj);
+                if (value != null){
+                    fieldNameList.add(declaredField.getName());
+                }
+            }
+        }
+        return fieldNameList;
     }
+
 }

@@ -248,13 +248,46 @@ a:hover {
     padding: 0 20px;
     color: #ffffff;
     text-decoration: none;
-    font: 1.5rem "Agency FB"
+    font: 2.5rem "Agency FB"
 }
 
 .tab-active {
     border-bottom-color: #f75357;
     border-bottom-style: solid;
     transform: translate(0, 2px);
+}
+
+/*侧边栏*/
+.total-archive {
+    font: 1.8rem "Agency FB";
+    color: #f75357;
+}
+
+.archive-post-item, .meta-post-item {
+    vertical-align: middle;
+    border-left: 1px solid #bbb;
+    margin-left: 0.3rem;
+    padding: 0.1rem 0 0.1rem 0.5rem;
+    box-sizing: border-box;
+}
+
+.archive-post-date, .meta-post-date {
+    font: 0.9rem/1rem "Oswald-Regular";
+    color: #999;
+}
+
+.archive-post-title, .meta-post-title {
+    font-size: 1rem;
+    margin-left: 0.8rem;
+    text-align: left;
+    color: #ccc;
+}
+
+.archive-year {
+    font-size: 1.5rem;
+    margin-bottom: 0.3rem;
+    color: #f75357;
+;
 }
 
 #sidebar-menu .nav a:hover {
@@ -287,8 +320,8 @@ a:hover {
 }
 
 .tab-wrapper {
-    padding: 10px;
-    text-align: center;
+    padding: 20px;
+    text-align: left;
 }
 
 #message .tab-wrapper{
@@ -482,6 +515,17 @@ a:hover {
 
 .sep20 {
     height: 20px;
+}
+
+#editor-wrapper {
+    background-image: url("/img/publish-bg.jpg");
+    width: 100%;
+    height: 100%;
+}
+
+#md-content {
+    /*background-color:rgba(255, 255, 255, 0.5);*/
+    filter:alpha(Opacity=80);-moz-opacity:0.8;opacity: 0.8;
 }
 
 .unselect-tag {
