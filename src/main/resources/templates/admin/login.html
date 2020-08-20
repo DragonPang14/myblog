@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理登录</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+<body class="admin-bg">
+<div th:insert="~{fragment/header :: header}">
+</div>
+<div class="admin-login-box rounded">
+    <div class="admin-login-cell">
+        <div class="inline admin-login-left">
+            <div class="pt-lg-5 text-center">
+                <span class="admin-login-left-title">Star Platinum</span>
+            </div>
+            <div class="pt-lg-5 text-center">
+                <span class="admin-login-left-intro">Be a brave man</span>
+            </div>
+        </div>
+        <div class="inline float-right admin-login-right rounded-right">
+            <div class="pt-lg-5 pl-lg-5 pr-lg-5">
+                <span class="admin-login-right-title">Admin Login</span>
+                <div class="input-group-lg pt-4">
+                    <input class="form-control" placeholder="用户名" type="email" id="userName">
+                </div>
+                <div class="input-group-lg pt-4">
+                    <input class="form-control" placeholder="密码" type="password" id="password">
+                </div>
+                <div class="input-group-lg pt-4 text-center">
+                    <div class="inline">
+                        <a type="button" class="btn btn-dark" href="javascript:userLogin();">登陆</a>
+                    </div>
+                    <div class="inline pl-3">
+                        <a type="button" class="btn btn-dark" href="/">返回</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:insert="~{fragment/sidebar :: sidebar}"></div>
+</body>
+<script src="/js/jquery-3.3.1.min.js" type="application/javascript"></script>
+<script src="/js/simple-sidebar.min.js" type="application/javascript"></script>
+<script src="/pagejs/header.js" type="application/javascript"></script>
+<script src="/pagejs/sidebar.js" type="application/javascript"></script>
+<script src="/pagejs/admin/adminLogin.js" type="application/javascript"></script>
+</html>

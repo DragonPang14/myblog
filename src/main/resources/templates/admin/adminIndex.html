@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+<body class="admin-index-bg">
+<div th:insert="~{fragment/header :: header}">
+</div>
+<div th:insert="~{fragment/adminSidebar :: adminSidebar}"></div>
+</body>
+<script src="/js/jquery-3.3.1.min.js" type="application/javascript"></script>
+<script src="/js/bootstrap.min.js" type="application/javascript"></script>
+<script src="/js/simple-sidebar.min.js" type="application/javascript"></script>
+<script src="/pagejs/header.js" type="application/javascript"></script>
+<script src="/pagejs/admin/adminSidebar.js" type="application/javascript"></script>
+</html>

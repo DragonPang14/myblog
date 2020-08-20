@@ -1,0 +1,56 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="adminSidebar" id="adminSidebar">
+    <div class="sidebar" id="sidebar-menu">
+        <div class="sidebar-wrapper" id="sidebar-wrapper">
+            <ul class="sidebar-tabs" id="myTab" role="tablist">
+                <li class="sidebar-tab-user tab-active">
+                    <a class="tag-link active " id="menu-tab" data-toggle="tab" href="#menu" role="tab"
+                       aria-controls="menu" aria-selected="false">Menu</a>
+                </li>
+                <li class="sidebar-tab-message">
+                    <a class="tag-link" id="message-tab" data-toggle="tab" href="#message" role="tab"
+                       aria-controls="message" aria-selected="false">Message
+                        <span th:if="${session.user != null}" class="badge badge-light"></span></a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="menu" role="tabpanel" aria-labelledby="menu-tab">
+                    <div class="tab-wrapper">
+                        <div th:if="${session.user != null}">
+                            <img th:src="${session.user.avatarUrl}" class="avatar-login rounded-circle">
+                            <div class="inline pl-3">
+                                <span th:text="${session.user.name}"></span>
+                            </div>
+                            <div class="pt-3">
+                                <button id="draftBox" onclick="draftBox()" class="btn btn-dark w-100">草稿箱
+                                    <span th:if="${session.user != null}" class="badge badge-light"></span>
+                                </button>
+                            </div>
+                            <div>
+                                <button class="btn btn-dark w-100">我的发布</button>
+                            </div>
+                            <a class="pt-3 float-right" href="/logout">logout</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="message" role="tabpanel" aria-labelledby="message-tab">
+                    <div class="tab-wrapper">
+                        <div id="unread-message-tab">
+
+                        </div>
+                        <div class="d-flex justify-content-center pt-4 pb-4" style="display: none">
+                            <div class="spinner-border" id="spinner-sidebar" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                        <nav class="sidebar-page-nav" style="display: none">
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</html>

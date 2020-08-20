@@ -45,13 +45,13 @@ function getArticleList(tag) {
         dataType:"json",
         success:function (data) {
             if(data.code == 100 && data.obj != null){
-                var listHtml = "";
+                var listHtml = '';
                 $.each(data.obj.pageList,function (index,article) {
                     var date = new Date(article.gmtCreate);
                     var year = date.getFullYear();
                     var month = date.getMonth() + 1;
                     var day = date.getDate();
-                    listHtml += '<article class="index-post">';
+                    listHtml += '<article class="index-post" style="display: none;">';
                     listHtml += '<a class="abstract-title" href="/article/'+article.id+'">';
                     listHtml += '<span>'+article.title+'</span>';
                     listHtml += '</a>';
@@ -72,6 +72,7 @@ function getArticleList(tag) {
                     listHtml += '</article>';
                 });
                 $(".main").append(listHtml);
+                $(".index-post").fadeIn();
                 $(".load-more").css("display","block");
                 $(".spinner-border").css("display","none");
             }else if(data.obj == null){

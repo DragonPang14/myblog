@@ -13,7 +13,6 @@ $(function () {
 
 
 function getTimeLine() {
-    console.info("getTimeLine");
     $.get({
         url:"/getTimeLine",
         dataType:"json",
@@ -32,10 +31,10 @@ function getTimeLine() {
                     let year = date.getFullYear();
                     let month = date.getMonth() + 1;
                     let day = date.getDate();
+                    //time-line年份
                     if (!yearMap.has(year)) {
                         contentHtml = '<div class="archive-year">'+year+'</div>';
                     } else {
-                        console.info('if:'+year);
                         contentHtml = yearMap.get(year);
                     }
                     contentHtml += '<div class="archive-post-item">';
@@ -46,9 +45,9 @@ function getTimeLine() {
                     contentHtml += '</div>';
                     yearMap.set(year, contentHtml);
                 })
+                //按年份append
                 $("#archive-content").append(timeLineHtml);
                 for (year of yearMap.keys()){
-                    console.info(year);
                     let yearHtml = yearMap.get(year);
                     $("#archive-content").append(yearHtml);
                 }

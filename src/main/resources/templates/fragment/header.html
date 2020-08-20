@@ -4,7 +4,7 @@
     <header class="index-header">
         <div class="header-side-menu" id="toggle-sidebar">❯</div>
         <a class="index-link float-right" href="/">Star Platinum</a>
-        <a class="index-link float-right" th:if="${session.user != null}" href="/publish">publish</a>
+        <a class="index-link float-right" th:if="${session.user != null && session.user.userType == 0}" href="/admin/adminIndex">Manager</a>
     </header>
 </div>
 </html>
