@@ -44,7 +44,7 @@ function getArticleList(tag) {
         url:url,
         dataType:"json",
         success:function (data) {
-            if(data.code == 100 && data.obj != null){
+            if(data.code == 100 && data.obj.pageList != null){
                 var listHtml = '';
                 $.each(data.obj.pageList,function (index,article) {
                     var date = new Date(article.gmtCreate);
@@ -75,7 +75,7 @@ function getArticleList(tag) {
                 $(".index-post").fadeIn();
                 $(".load-more").css("display","block");
                 $(".spinner-border").css("display","none");
-            }else if(data.obj == null){
+            }else if(data.obj.pageList == null){
                 $(".spinner-border").css("display","none");
                 alert("没有更多了！");
                 $("#btn-page").fadeOut();

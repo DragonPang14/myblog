@@ -50,7 +50,7 @@ public class ArticleService {
 
         Integer totalCount = articleDao.totalCount(userId, tagId);
         PaginationDto<ArticleDto> pagination = CommonUtils.buildPage(ArticleDto.class,totalCount,page,size);
-        List<ArticleDto> articleDtos = articleDao.getArticleList(userId, pagination.getOffset(), size, tagId);
+        List<ArticleDto> articleDtos = pagination.getOffset() == null?null:articleDao.getArticleList(userId, pagination.getOffset(), size, tagId);
         pagination.setPageList(articleDtos);
         return pagination;
     }
@@ -250,14 +250,12 @@ public class ArticleService {
 
     /**
      * @desc 获取时间线
-     * @param page
      * @return
      */
     public List<ArticleDto> getTimeLine() {
         List<ArticleDto> timeLineDtos = articleDao.getTimeLine();
         return timeLineDtos;
     }
-
 
 
 }

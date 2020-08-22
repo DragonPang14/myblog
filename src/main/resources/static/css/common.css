@@ -375,6 +375,8 @@ a:hover {
     font-size: 14px;
 }
 
+
+
 .gray, .gray a {
     color: #999;
 }
@@ -463,7 +465,6 @@ a:hover {
     transform: translate3d(0, 0, 0);
     background-color: #F7F7F7;
     position: relative;
-    box-shadow: -3px 0 2px 0 rgba(0, 0, 0, 0.6);
 }
 
 .toc-wrapper {
@@ -537,7 +538,7 @@ a:hover {
 }
 
 #editor-wrapper {
-    background-image: url("/img/publish-bg.jpg");
+    background-color: #f7f7f7;
     width: 100%;
     height: 100%;
 }
@@ -962,5 +963,17 @@ main {
     font: 3rem "Agency FB";
     color: #153e54;
     font-weight: bolder;
+}
+
+/*buttom*/
+.web-bottom {
+    background-color: inherit;
+    buttom:0;
+    right: 0;
+    left: 0;
+}
+
+.web-bottom a:hover{
+    color: #f75357;
 }
 

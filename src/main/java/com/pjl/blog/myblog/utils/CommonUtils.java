@@ -53,9 +53,6 @@ public class CommonUtils {
     public static <T> PaginationDto buildPage(T t, Integer totalCount, Integer page, Integer size){
         Integer totalPage = CommonUtils.calculateTotalPage(totalCount);
         Integer offset = CommonUtils.calculatePageOffset(totalPage, page,size);
-        if (offset == null) {
-            return null;
-        }
         PaginationDto<T> pagination = new PaginationDto<T>();
         pagination.setOffset(offset);
         pagination.setPagination(totalPage,page);

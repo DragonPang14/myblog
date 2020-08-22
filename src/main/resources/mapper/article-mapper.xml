@@ -39,7 +39,7 @@
         </foreach>
     </insert>
     <select id="totalCount" resultType="integer">
-        select count(1) from article a
+        select count(distinct a.id) from article a
         <if test="tagId != null">
             left join article_tags at on a.id = at.article_id
             left join tag t on at.tag_id = t.id
@@ -51,23 +51,28 @@
         <if test="userId != null">
             and a.creator = #{userId}"
         </if>
+        and a.type = 1
         and a.del_flag = 0
+
     </select>
 
     <select id="getArticleList" resultMap="ArticleDto">
         select a.id aid,a.title,a.description,a.description_str,a.content,a.gmt_create,a.gmt_modified,a.creator,a.comment_count,a.view_count,a.like_count,
-            t.id tid,t.tag_name,t.remarks,
+            a.tid,a.tag_name,a.remarks,
             u.id uid,u.account_id,u.name user_name,u.token,u.gmt_create,u.gmt_modified,u.avatar_url
-        from (select * from article where type = 1 and del_flag = 0 order by gmt_create desc limit #{offset},#{size}) a
+        from (select a.*,
+        t.id tid,t.tag_name,t.remarks from article a
         left join article_tags at on a.id = at.article_id and at.del_flag = 0
-        left join tag t on at.tag_id = t.id
+        left join tag t on at.tag_id = t.id and t.del_flag = 0
+        where a.type = 1 and a.del_flag = 0
+        <if test="tagId != null">
+            and at.tag_id = #{tagId}
+        </if>
+        order by gmt_create desc limit #{offset},#{size}) a
         left join user u on a.creator = u.id
         where 1 = 1
         <if test="userId != null">
             and a.creator = #{userId};
-        </if>
-        <if test="tagId != null">
-            and at.tag_id = #{tagId}
         </if>
         order by a.gmt_create desc
     </select>
