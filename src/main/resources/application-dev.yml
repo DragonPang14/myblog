@@ -1,0 +1,86 @@
+github:
+  client:
+    id: b3b9a56728e320a8e2dc
+    secret: dc90f4e6414b37e505ec169ede5e2a93e9d8d105
+  getaccesstoken:
+    url: https://github.com/login/oauth/access_token
+  getuser:
+    url: https://api.github.com/user
+
+callback:
+  url: http://blog.starplatinum.space/callback
+
+
+FASTDFS_SERVER: http://127.0.0.1:89/
+DEFAULT_AVATAR: http://127.0.0.1:89/group1/M00/00/00/Xr9Bi16TJsCAKFamAAACk7pNBHw526_big.png
+VIEWS_COUNT_KEY: articleViewsId
+DRAFT_KEY: articleDraft
+#database
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/pjlblog?useUnicode=true&useAffectedRows=true&characterEncoding=utf8
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      read-only: false
+      connection-timeout: 60000
+      idle-timeout: 60000
+      validation-timeout: 3000
+      max-lifetime: 60000
+      maximum-pool-size: 60
+      login-timeout: 5
+      minimum-idle: 10
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+    timeout: 5000
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+  mail:
+    host: smtp.exmail.qq.com
+    username:
+    password:
+    protocol: smtp
+    port: 465
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+
+#fastdfs配置
+fdfs:
+  soTimeout: 1500
+  connectTimeout: 600
+  thumbImage:
+    width: 150
+    height: 150
+  trackerList: 127.0.0.1:22122
+
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath*:mapper/*.xml
+
+
+logging:
+  level:
+    com:
+      pjl:
+        blog:
+          myblog:
+            dao: debug
+server:
+  port: 8080
