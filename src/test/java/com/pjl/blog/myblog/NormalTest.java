@@ -1,21 +1,8 @@
 package com.pjl.blog.myblog;
 
-import com.pjl.blog.myblog.config.RedisConfig;
 import com.pjl.blog.myblog.service.MailService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisClusterConnection;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.RedisSentinelConnection;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.support.SimpleTriggerContext;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
-import java.util.*;
 
 public class NormalTest extends MyblogApplicationTests{
 
@@ -35,7 +22,6 @@ public class NormalTest extends MyblogApplicationTests{
 
         boolean dp[][] = new boolean[len][len];
         char[] Schar = s.toCharArray();
-
         //初始化
         for (int i = 0;i < len;i++){
             dp[i][i] = true;

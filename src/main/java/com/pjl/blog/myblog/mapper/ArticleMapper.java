@@ -14,6 +14,7 @@ public interface ArticleMapper {
 
     @Insert("insert into article (title,description,description_str,content,gmt_create,gmt_modified,creator,type) " +
             "values (#{title},#{description},#{descriptionStr},#{content},#{gmtCreate},#{gmtModified},#{creator},#{type})")
+    @Options(useGeneratedKeys = true,keyColumn = "id",keyProperty = "id")
     int createArticle(ArticleVO articleVO);
 
     @Select("select count(1) from article where creator = #{userId}")

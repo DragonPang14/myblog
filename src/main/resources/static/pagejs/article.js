@@ -13,7 +13,8 @@ $(function () {
 })
 
 window.onscroll = function (ev) {
-    var top = document.getElementsByClassName("toc-wrapper")[0].getBoundingClientRect().top;
+    let tocWrapper = document.getElementsByClassName("toc-wrapper")[0];
+    let top = tocWrapper.getBoundingClientRect().top;
     if (top < 0) {
         $(".toc-wrapper").addClass("toc-fixed");
     }
