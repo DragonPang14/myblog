@@ -2,7 +2,7 @@
 
 # 现有功能
 
-1. 博客发布
+1. 博客发布，markdown编辑器使用[editor.md](https://github.com/pandao/editor.md)
 2. 评论，二级（多级）评论
 3. 回复消息通知
 4. 草稿箱，自动保存
