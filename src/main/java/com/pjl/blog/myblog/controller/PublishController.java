@@ -88,12 +88,14 @@ public class PublishController {
                 return new ResultDto(CustomizeStatusEnum.UNLOGIN_CODE);
             }
             UserVO user = userService.findByToken(token);
-            String tag = articleDto.getTag().substring(0,articleDto.getTag().length() - 1);
-            String[] tagIdStr = tag.split(",");
             List<Integer> tagIdList = new ArrayList<>();
-            for (String s : tagIdStr) {
-                Integer tagId = Integer.valueOf(s);
-                tagIdList.add(tagId);
+            if(!StringUtils.isEmpty(articleDto.getTag())){
+                String tag = articleDto.getTag().substring(0,articleDto.getTag().length() - 1);
+                String[] tagIdStr = tag.split(",");
+                for (String s : tagIdStr) {
+                    Integer tagId = Integer.valueOf(s);
+                    tagIdList.add(tagId);
+                }
             }
             String[] description = articleDto.getDescription().split("&lt;!--summary--&gt;");
             if (articleDto.getContent().contains("<!--summary-->")){

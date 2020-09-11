@@ -75,8 +75,9 @@ public class ArticleService {
         if (!StringUtils.isEmpty(articleDto.getId()) ||
                 (articleDto.getType() == ArticleTypeEnum.ABOUT_ME.getCode() &&
                         articleMapper.findArticleByType(ArticleTypeEnum.ABOUT_ME.getCode()) != null)) {
-            ArticleVO dbArticleVO = articleMapper.findArticleById(articleDto.getId());
-            BeanUtils.copyProperties(articleDto,dbArticleVO);
+            ArticleVO dbArticleVO = articleDto.getType() == ArticleTypeEnum.ABOUT_ME.getCode()?articleMapper.findArticleByType(ArticleTypeEnum.ABOUT_ME.getCode()):
+                    articleMapper.findArticleById(articleDto.getId());
+            BeanUtils.copyProperties(articleDto,dbArticleVO,"id");
             dbArticleVO.setGmtModified(System.currentTimeMillis());
             isSuccess = articleMapper.updateArticle(dbArticleVO);
             articleMapper.deleteArticleTags(dbArticleVO.getId());
@@ -95,16 +96,18 @@ public class ArticleService {
             List<String> fieldNameList = CommonUtils.getObjectUsedFieldName(articleDto);
             redisUtils.hmDel(draftKey,fieldNameList.toArray());
         }
-        List<ArticleTagsVO> articleTagsList = new ArrayList<>();
-        for (Integer tagId : tagIdList) {
-            ArticleTagsVO articleTags = new ArticleTagsVO();
-            articleTags.setArticleId(id);
-            articleTags.setTagId(tagId);
-            articleTags.setGmtCreate(System.currentTimeMillis());
-            articleTagsList.add(articleTags);
+        if(tagIdList.size() > 0){
+            List<ArticleTagsVO> articleTagsList = new ArrayList<>();
+            for (Integer tagId : tagIdList) {
+                ArticleTagsVO articleTags = new ArticleTagsVO();
+                articleTags.setArticleId(id);
+                articleTags.setTagId(tagId);
+                articleTags.setGmtCreate(System.currentTimeMillis());
+                articleTagsList.add(articleTags);
+            }
+            //保存问题与标签关系
+            articleDao.saveArticleTags(articleTagsList);
         }
-        //保存问题与标签关系
-        articleDao.saveArticleTags(articleTagsList);
     }
 
     /**
