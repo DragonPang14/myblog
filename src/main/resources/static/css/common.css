@@ -511,12 +511,22 @@ a:hover {
 }
 
 .side-top .toc-level-2 {
-    font: bolder 1.2rem "Agency FB";
+    font: bolder 1.3rem "Agency FB";
     color: #777777;
 }
 
 .side-top .toc-level-3 {
+    font: bolder 1.1rem "Agency FB";
+    color: #777777;
+}
+
+.side-top .toc-level-4 {
     font: bolder 1rem "Agency FB";
+    color: #777777;
+}
+
+.side-top .toc-level-5 {
+    font: bolder 0.9rem "Agency FB";
     color: #777777;
 }
 
